@@ -1,0 +1,25 @@
+{
+    "name": "vendor/src",
+    "description": "cms",
+    "require": {
+        "silex/silex": "~1.3",
+        "doctrine/dbal": "~2.2"
+    },
+    "require-dev": {
+        
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jordan",
+            "email": "jordan@emporioht.com.br"
+        }
+    ],
+    "minimum-stability": "dev",
+      "autoload": {
+        "psr-4": {
+            "Core\\": "src/core",
+            "View\\": "src/view"
+        }
+  }
+}
