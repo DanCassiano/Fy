@@ -19,9 +19,7 @@
 	// 			),
 	// 	));
 	$app['debug'] = true;
-	$app['dir'] = dirname(__DIR__);	
-	// $app['dir_repo'] = $ini->repodir;
-	
+	$app['dir'] = dirname(__DIR__);
 	Request::enableHttpMethodParameterOverride();
 	$app->mount('/', new Core\Controller());
 
