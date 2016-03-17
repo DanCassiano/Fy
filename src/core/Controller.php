@@ -7,6 +7,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
+// use Core\Menu;
+
 class Controller implements ControllerProviderInterface {
 
 	private $dir;
@@ -27,6 +29,7 @@ class Controller implements ControllerProviderInterface {
 		$factory->get('{action}/{modulo}','Core\Controller::action');
 		$factory->get('{action}/{modulo}/{operacao}','Core\Controller::actionModulo');
 
+		$factory->post('site/menu/{operacao}','Core\Controller::postMenu');
 
 		$factory->get('login','Core\Controller::login');
 
@@ -48,24 +51,34 @@ class Controller implements ControllerProviderInterface {
 							"action"=> $action,
 							"modulo"=> $modulo,
 							"operacao"=>"",
-							"dir"=> $this->dir);
+							"dir"=> $this->dir,
+							"db"=>$app['db']);
 		return $this->init();
 	}
 	public function actionModulo( Application $app, $action, $modulo, $operacao ){
 		$this->dir = $app['dir'];
+
 		$this->vars = array("baseURL"=> $app['request']->getSchemeAndHttpHost(),
 							"titulo"=> "Fy - " . $modulo,
 							"action"=> $action,
 							"modulo"=> $modulo,
 							"operacao"=>$operacao,
-							"dir"=> $this->dir);
+							"dir"=> $this->dir,
+							"db"=>$app['db'],
+							"id"=> $app['request']->get('id'));
 		return $this->init();
+	}
+
+	public function postMenu( Application $app, Request $request, $operacao ){
+		$class = new \Core\Menu( $app['db'] );
+		parse_str($request->getContent(), $r);
+		$class->$operacao( $r );
+		return $app->redirect('/site/menu');
 	}
 
 	private function modulo( $action, $modulo ){
 		require $this->dir . "/" . $action . "/" . $modulo . ".php";
 	}
-
 
 	private function init(){
 		ob_start();
