@@ -13,6 +13,7 @@
 			</div>
 			<!-- /.box-header -->
 			<div class="box-body table-responsive">
+			<?php $paginas = $db->fetchAll('SELECT * FROM paginas'); ?>
 				<table class="table table-hover table-condensed">
 					<tbody>
 						<tr>
@@ -21,17 +22,23 @@
 							<th>Status</th>
 							<th></th>
 						</tr>
-						<tr>
-							<td>Home</td>
-							<td>11-7-2014</td>
-							<td>
-								<span class="label label-success">publicado</span>
-							</td>
-							<td>
-								<a href="<?=$baseURL?>/site/menu/edit?id=1" class="btn btn-link btn-xs">Editar</a>
-								<a href="<?=$baseURL?>/site/menu/edit?id=1" class="btn btn-link btn-xs">Remover</a>
-							</td>
-						</tr>
+						<?php foreach ($paginas as $i => $pagina ): ?>
+							<tr>
+								<td><?=$pagina['pagina']?></td>
+								<td><?=$pagina['data-criacao']?></td>
+								<td>
+									<?php if( $pagina['publicado'] == 0 ){ ?>
+										<span class="label label-warning">Não publicado</span>
+									<?php }elseif ( $pagina['publicado'] == 1 ) {?>
+										<span class="label label-success">publicado</span>
+									<?php } ?>
+								</td>
+								<td>
+									<a href="<?=$baseURL?>/site/menu/edit?id=<?=$pagina['id']?>" class="btn btn-link btn-xs">Editar</a>
+									<a href="<?=$baseURL?>/site/menu/del?id=<?=$pagina['id']?>" class="btn btn-link btn-xs">Remover</a>
+								</td>
+							</tr>
+						<?php endforeach ?>
 					</tbody>
 				</table>
 			</div>
