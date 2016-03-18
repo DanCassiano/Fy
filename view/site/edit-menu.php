@@ -5,12 +5,18 @@
 	$link = "";
 	$status = 1;
 	$acao = "novo";
+	$conteudo = "";
 	if( !empty( $id )){
-		$pagina = $db->fetchAll('SELECT id, pagina, link, publicado FROM paginas WHERE id = '. $id);
+		$pagina = $db->fetchAll('SELECT paginas.id, pagina, link, publicado, conteudo.conteudo, conteudo.id as id_conteudo
+								FROM paginas 
+								LEFT JOIN conteudo ON conteudo.id_pagina = paginas.id 
+								WHERE paginas.id = '. $id);
 		$id = $pagina[0]['id'];
 		$nome = $pagina[0]['pagina'];
 		$link = $pagina[0]['link'];
 		$status = $pagina[0]['publicado'];
+		$conteudo = $pagina[0]['conteudo'];
+		$idConteudo = $pagina[0]['id_conteudo'];
 		$acao = "edit";
 	}
 ?>
@@ -26,6 +32,7 @@
 	<!-- form start -->
 	<form role="form" action="<?=$baseURL?>/site/menu/<?=$acao?>" method="post"> 
 		<input type="hidden" name="id" value="<?=$id?>"></input>
+		<input type="hidden" name="idConteudo" value="<?=$idConteudo?>"></input>
 		<div class="box-body">
 			<div class="form-group">
 				<label for="inputNomeMenu">Menu</label>
@@ -41,6 +48,9 @@
 					<option value="1" <?php  $status == 1 ? "selected='selected'" : "" ?> >Publicado</option>
 					<option value="0" <?php  $status == 0 ? "selected='selected'" : "" ?>>Não Publicado</option>
 				</select>
+			</div>
+			<div class="textarea">
+				<textarea id='txtConteudo' cols="10" rows="10" style="width:100%" name="conteudo"><?=$conteudo?></textarea>
 			</div>
 		</div>
 		<!-- /.box-body -->

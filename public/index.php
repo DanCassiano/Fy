@@ -21,8 +21,8 @@
 	$schema = $app['db']->getSchemaManager();
 if (!$schema->tablesExist('paginas')) {
     $users = new Table('users');
-    var_dump( $users);
-	die("asdasdads");
+    // var_dump( $users);
+	// die("asdasdads");
     // $users->addColumn('id', 'integer', array('unsigned' => true, 'autoincrement' => true));
     // $users->setPrimaryKey(array('id'));
     // $users->addColumn('username', 'string', array('length' => 32));
@@ -57,7 +57,7 @@ if (!$schema->tablesExist('paginas')) {
 				case 404:
 					$message = ' <center>
 										<h1>Ops, nada aqui!</h1>
-								</center>';
+								</center>'.$e->getMessage();
 				break;
 			default:
 				$message = $e->getMessage() . $code;

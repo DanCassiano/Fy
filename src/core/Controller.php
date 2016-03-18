@@ -18,25 +18,28 @@ class Controller implements ControllerProviderInterface {
 	public function connect(Application $app) {
 
 		$factory=$app['controllers_factory'];
-
-		$user = $app['session']->get('user');
-
-		// if( empty($user))
-			// $app->redirect('login');
+		
 
 		$this->dir = $app['dir'];
 		$factory->get('/','Core\Controller::home');
-		$factory->get('{action}/{modulo}','Core\Controller::action');
-		$factory->get('{action}/{modulo}/{operacao}','Core\Controller::actionModulo');
+		
+		// site
+			$factory->get('site/{modulo}/','Core\ControllerMenu::action');
+			$factory->get('site/{modulo}/{operacao}','Core\ControllerMenu::operacao');
 
-		$factory->post('site/menu/{operacao}','Core\Controller::postMenu');
+			$factory->post('site/menu/{operacao}','Core\ControllerMenu::postMenu');
 
 		$factory->get('login','Core\Controller::login');
 
 		return $factory;
 	}
 
-	public function home( Application $app ){		
+	public function home( Application $app ){
+
+		$user = $app['session']->get('user');
+		var_dump($user);
+		if( empty($user))
+			return $app->redirect('login');
 
 		$this->dir = $app['dir'];
 		$this->vars = array("baseURL"=> $app['request']->getSchemeAndHttpHost(),
@@ -46,13 +49,21 @@ class Controller implements ControllerProviderInterface {
 
 	public function action( Application $app, $action, $modulo ){
 		$this->dir = $app['dir'];
+
+		$status = $app['request']->get('status');
+
+		if( $status == "")
+			$status = 1;
+
 		$this->vars = array("baseURL"=> $app['request']->getSchemeAndHttpHost(),
 							"titulo"=> "Fy - " . $modulo,
 							"action"=> $action,
 							"modulo"=> $modulo,
 							"operacao"=>"",
 							"dir"=> $this->dir,
-							"db"=>$app['db']);
+							"db"=>$app['db'],
+							"status"=>$status,
+							"pg"=>$app['request']->get('pg'));
 		return $this->init();
 	}
 	public function actionModulo( Application $app, $action, $modulo, $operacao ){
@@ -69,15 +80,27 @@ class Controller implements ControllerProviderInterface {
 		return $this->init();
 	}
 
-	public function postMenu( Application $app, Request $request, $operacao ){
-		$class = new \Core\Menu( $app['db'] );
-		parse_str($request->getContent(), $r);
-		$class->$operacao( $r );
-		return $app->redirect('/site/menu');
-	}
-
 	private function modulo( $action, $modulo ){
 		require $this->dir . "/" . $action . "/" . $modulo . ".php";
+	}
+
+	public function login(Application $app ){
+		$this->dir = $app['dir'];
+
+		$this->vars = array("baseURL"=> $app['request']->getSchemeAndHttpHost(),
+							"titulo"=> "Fy - Login",
+							"dir"=> $this->dir);
+		return $this->loginView();
+	}
+
+	private function loginView(){
+		ob_start();
+		extract($this->vars);
+		require $this->dir . "/view/login.php";
+		$pag = ob_get_contents();
+		ob_end_clean();
+
+		return $pag;
 	}
 
 	private function init(){

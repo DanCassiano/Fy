@@ -3,17 +3,21 @@
 		<div class="box box-solid">
 			<div class="box-header">
 				<h3 class="box-title">Menus</h3>
-				<div class="box-tools">
-					<select>
-						<option>Publicados</option>
-						<option>Não publicados</option>
-					</select>
+				<div class="pull-right">
+					<form action="site/menu" id="formStatus">
+						<select class="form-control" style="width:200px" name="status" id="selectStatus">
+							<option value="1" <?=$status == 1 ? "selected=selected": "" ?> >Publicados</option>
+							<option value="0" <?=$status == 0 ? "selected=selected": "" ?>>Não publicados</option>
+						</select>
+					</form>
+				</div>
+				<div class="pull-right" style="margin-right:5px;">
 					<a href="<?=$baseURL?>/site/menu/novo" class="btn btn-success">Novo</a>
 				</div>
 			</div>
 			<!-- /.box-header -->
 			<div class="box-body table-responsive">
-			<?php $paginas = $db->fetchAll('SELECT * FROM paginas'); ?>
+			
 				<table class="table table-hover table-condensed">
 					<tbody>
 						<tr>
@@ -35,7 +39,7 @@
 								</td>
 								<td>
 									<a href="<?=$baseURL?>/site/menu/edit?id=<?=$pagina['id']?>" class="btn btn-link btn-xs">Editar</a>
-									<a href="<?=$baseURL?>/site/menu/del?id=<?=$pagina['id']?>" class="btn btn-link btn-xs">Remover</a>
+									<a href="#edit" id='<?=$pagina['id']?>' class="btn btn-link btn-xs"  >Remover</a>
 								</td>
 							</tr>
 						<?php endforeach ?>
@@ -44,13 +48,13 @@
 			</div>
 			<!-- /.box-body -->
 			<div class="box-footer clearfix">
-              <ul class="pagination pagination-sm no-margin pull-right">
+          <!--     <ul class="pagination pagination-sm no-margin pull-right">
                 <li><a href="#">«</a></li>
                 <li><a href="#">1</a></li>
                 <li><a href="#">2</a></li>
                 <li><a href="#">3</a></li>
                 <li><a href="#">»</a></li>
-              </ul>
+              </ul> -->
             </div>
 		</div>
 		<!-- /.box -->
