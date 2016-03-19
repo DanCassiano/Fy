@@ -18,18 +18,24 @@ class Controller implements ControllerProviderInterface {
 	public function connect(Application $app) {
 
 		$factory=$app['controllers_factory'];
-		
-
 		$this->dir = $app['dir'];
-		$factory->get('/','Core\Controller::home');
+
+		//Home
+			$factory->get('/','Core\Controller::home');
 		
 		// site
 			$factory->get('site/{modulo}/','Core\ControllerMenu::action');
 			$factory->get('site/{modulo}/{operacao}','Core\ControllerMenu::operacao');
-
 			$factory->post('site/menu/{operacao}','Core\ControllerMenu::postMenu');
+		
+		// Usuario
+			$factory->get('usuario/{modulo}/','Core\ControllerUsuarios::action');
+			$factory->get('usuario/{modulo}/{operacao}','Core\ControllerUsuarios::operacao');
+			$factory->post('usuario/users/{operacao}','Core\ControllerUsuarios::postUsuario');
 
-		$factory->get('login','Core\Controller::login');
+		// Login
+			$factory->get('login','Core\Controller::login');
+			$factory->post('login','Core\Controller::postLogin');
 
 		return $factory;
 	}
@@ -37,13 +43,15 @@ class Controller implements ControllerProviderInterface {
 	public function home( Application $app ){
 
 		$user = $app['session']->get('user');
-		var_dump($user);
+		
 		if( empty($user))
 			return $app->redirect('login');
 
 		$this->dir = $app['dir'];
 		$this->vars = array("baseURL"=> $app['request']->getSchemeAndHttpHost(),
-							"titulo"=> "Fy - HOME");
+							"titulo"=> "Fy - HOME",
+							"userImagem"=>'dist/img/user2-160x160.jpg',
+							"userNome"=> "Jordan");
 		return $this->init();
 	}
 
@@ -85,12 +93,27 @@ class Controller implements ControllerProviderInterface {
 	}
 
 	public function login(Application $app ){
+		
+		$user = $app['session']->get('user');
+		
+		if( !empty($user))
+			return $app->redirect('/');
+
 		$this->dir = $app['dir'];
 
 		$this->vars = array("baseURL"=> $app['request']->getSchemeAndHttpHost(),
 							"titulo"=> "Fy - Login",
 							"dir"=> $this->dir);
 		return $this->loginView();
+	}
+
+	public function postLogin( Application $app, Request $request ){
+
+		$r = "";
+		parse_str($request->getContent(), $r);
+		$app['session']->set('user', $r );
+
+		return $app->redirect('/');
 	}
 
 	private function loginView(){

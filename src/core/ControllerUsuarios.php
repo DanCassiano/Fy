@@ -11,7 +11,7 @@
 	/**
 	* ControllerMenu
 	*/
-	class ControllerMenu  {
+	class ControllerUsuarios  {
 
 		function action( Application $app, $modulo ){
 
@@ -25,23 +25,23 @@
 			if( $status == "")
 				$status = 1;
 
-			$paginas = $app['db']->fetchAll('SELECT * FROM paginas WHERE publicado = ?',array($status));
+			$usuarios = $app['db']->fetchAll('SELECT id, nome, email FROM usuario WHERE ativo = ?',array($status));
 
 			$baseURL = $app['request']->getSchemeAndHttpHost();
 			$temp = new Temp();
 			$temp->vars(array(
 							"baseURL"=> $baseURL,
 							"titulo"=> "Fy",
-							"action"=> "site",
+							"action"=> "usuario",
 							"modulo"=> $modulo,
 							"operacao"=>"",
 							"dir"=> $app['dir'],
 							"status"=>$status,
 							"pg"=> $pag,
-							'paginas'=>$paginas ));
+							'usuarios'=>$usuarios ));
 
-			$temp->js("<script src='{$baseURL}/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js'></script>");
-			$temp->js("<script src='{$baseURL}/js/menu/menu.js'></script>");
+			
+			$temp->js("<script src='{$baseURL}/js/usuario/user.js'></script>");
 
 			$temp->setDirTemp( $app['dir'] . "/view/index.php" );
 			return $temp->init();
@@ -54,38 +54,31 @@
 			$temp->vars(array(
 							"baseURL"=> $baseURL,
 							"titulo"=> "Fy",
-							"action"=> "site",
+							"action"=> "usuario",
 							"modulo"=> $modulo,
 							"operacao"=> $operacao,
 							"dir"=> $app['dir'],
 							"db"=>$app['db'],
 							"id"=> $app['request']->get("id"),
 							));
-			$temp->js("<script src='{$baseURL}/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js'></script>");
-			$temp->js("<script src='{$baseURL}/js/menu/menu.js'></script>");
-			$temp->css("<link rel='stylesheet' href='{$baseURL}/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css'>");
-
+			
+			$temp->js("<script src='{$baseURL}/plugins/iCheck/icheck.min.js'></script>");
+			$temp->css("<link rel=\"stylesheet\" href=\"{$baseURL}/plugins/iCheck/all.css\">");
+			$temp->js("<script src='{$baseURL}/js/usuario/user.js'></script>");
 			$temp->setDirTemp( $app['dir'] . "/view/index.php" );
 			return $temp->init();
 		}
 
-		public function postMenu( Application $app, Request $request, $operacao ){
-			$class = new \Core\Menu( $app['db'] );
+		public function postUsuario( Application $app, Request $request, $operacao ){
+			$class = new \Core\Usuarios( $app['db'] );
 			parse_str($request->getContent(), $r);
 			if( $operacao == 'novo'){
-				$idPagina = $class->novo( $r );
-				if( $r['conteudo'] )
-					$class->addConteudo( $idPagina, $r['conteudo'] );
+				$class->novo($r);
 			}
 			if( $operacao == 'edit'){
 
-				$idPagina = $class->edit( $r );
-				if( $r['conteudo'] && $r['id'] && empty( $r['idConteudo'] ))
-					$class->addConteudo( $r['id'], $r['conteudo'] );
-				else {
-					$class->updateConteudo( $r['idConteudo'] , $r['conteudo']);
-				}
+				
 			}
-			return $app->redirect('/site/menu');
+			return $app->redirect('/usuario/users');
 		}
 	}

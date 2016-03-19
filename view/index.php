@@ -211,14 +211,14 @@
 							<!-- User Account: style can be found in dropdown.less -->
 							<li class="dropdown user user-menu">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-									<img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
-									<span class="hidden-xs">Alexander Pierce</span>
+									<img src="<?=$userImagem?>" class="user-image" alt="<?=$userNome?>">
+									<span class="hidden-xs"><?=$userNome?></span>
 								</a>
 								<ul class="dropdown-menu">
 									<!-- User image -->
 									<li class="user-header">
 										<img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
-										<p>Alexander Pierce - Web Developer<small>Member since Nov. 2012</small></p>
+										<p><?=$userNome?></p>
 									</li>
 									<!-- Menu Body -->
 									<li class="user-body">
@@ -278,17 +278,38 @@
 					<!-- sidebar menu: : style can be found in sidebar.less -->
 					<ul class="sidebar-menu">
 						<!-- <li class="header">MAIN NAVIGATION</li> -->
-						<li class="active treeview">
+						<li class="treeview">
 							<a href="#">
 								<i class="fa fa-dashboard"></i>
 								<span>Dashboard</span>
 								<i class="fa fa-angle-left pull-right"></i>
 							</a>
+						</li>
+						<li>
+							<a href="#">
+								<i class="fa fa-laptop"></i>
+								<span>Site</span>
+								<i class="fa fa-angle-left pull-right"></i>
+							</a>
 							<ul class="treeview-menu">
-								<li class="active"><a href="site/menu"><i class="fa fa-circle-o"></i>Menu</a></li>
+								<li class="active">
+									<a href="site/menu">
+										<i class="fa fa-circle-o"></i>
+										Menu
+									</a>
+								</li>
 							</ul>
 						</li>
-					
+						<li class="treeview">
+							<a href="#">
+								<i class="fa fa-child"></i>
+								<span>Usuários</span>
+								<i class="fa fa-angle-left pull-right"></i>
+							</a>
+							<ul class="treeview-menu menu-open" >
+								<li><a href="usuario/users"><i class="fa fa-circle-o"></i> Usuários</a></li>	
+							</ul>
+						</li>
 					</ul>
 				</section>
 				<!-- /.sidebar -->
@@ -499,7 +520,7 @@
 																<!-- ChartJS 1.0.1 -->
 																<script src="<?=$baseURL?>/plugins/chartjs/Chart.min.js"></script>
 																<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-																<script src="<?=$baseURL?>/dist/js/pages/dashboard2.js"></script>
+																<!-- <script src="<?=$baseURL?>/dist/js/pages/dashboard2.js"></script> -->
 																<!-- AdminLTE for demo purposes -->
 																<script src="<?=$baseURL?>/dist/js/demo.js"></script>
 																<?=$js ?>

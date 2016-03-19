@@ -41,7 +41,6 @@
 			$this->vars['css'] = $this->css;
 			ob_start();
 				extract($this->vars);
-				extract( $this->assets );
 				require $this->temp;
 				$pag = ob_get_contents();
 			ob_end_clean();
