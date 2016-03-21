@@ -9,8 +9,6 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 		<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 		<link rel="stylesheet" href="<?=$baseURL?>/plugins/jvectormap/jquery-jvectormap-1.2.2.css">
-		<link rel="stylesheet" href="<?=$baseURL?>/dist/css/AdminLTE.min.css">
-		<link rel="stylesheet" href="<?=$baseURL?>/dist/css/skins/_all-skins.min.css">
 		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 		<!--[if lt IE 9]>
@@ -18,7 +16,9 @@
 		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 		<![endif]-->
 		<?=$css?>
+		<link rel="stylesheet" href="<?=$baseURL?>/dist/css/AdminLTE.min.css">
 		<base href="<?=$baseURL?>"></base>
+		<link rel="stylesheet" href="<?=$baseURL?>/dist/css/skins/_all-skins.min.css">
 	</head>
 	<body class="hold-transition skin-blue sidebar-collapse sidebar-mini fixed">
 		<div class="wrapper">
@@ -220,25 +220,13 @@
 										<img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
 										<p><?=$userNome?></p>
 									</li>
-									<!-- Menu Body -->
-									<li class="user-body">
-										<div class="col-xs-4 text-center">
-											<a href="#">Followers</a>
-										</div>
-										<div class="col-xs-4 text-center">
-											<a href="#">Sales</a>
-										</div>
-										<div class="col-xs-4 text-center">
-											<a href="#">Friends</a>
-										</div>
-									</li>
 									<!-- Menu Footer-->
 									<li class="user-footer">
-										<div class="pull-left">
+										<!-- <div class="pull-left">
 											<a href="#" class="btn btn-default btn-flat">Profile</a>
-										</div>
+										</div> -->
 										<div class="pull-right">
-											<a href="#" class="btn btn-default btn-flat">Sign out</a>
+											<a href="admin/logout" class="btn btn-default btn-flat">Sair</a>
 										</div>
 									</li>
 								</ul>
@@ -279,7 +267,7 @@
 					<ul class="sidebar-menu">
 						<!-- <li class="header">MAIN NAVIGATION</li> -->
 						<li class="treeview">
-							<a href="#">
+							<a href="admin">
 								<i class="fa fa-dashboard"></i>
 								<span>Dashboard</span>
 								<i class="fa fa-angle-left pull-right"></i>
@@ -292,10 +280,16 @@
 								<i class="fa fa-angle-left pull-right"></i>
 							</a>
 							<ul class="treeview-menu">
-								<li class="active">
-									<a href="site/menu">
+								<li class="">
+									<a href="admin/site/menu">
 										<i class="fa fa-circle-o"></i>
 										Menu
+									</a>
+								</li>
+								<li class="">
+									<a href="admin/site/galeria">
+										<i class="fa fa-circle-o"></i>
+										Imagens
 									</a>
 								</li>
 							</ul>
@@ -307,7 +301,17 @@
 								<i class="fa fa-angle-left pull-right"></i>
 							</a>
 							<ul class="treeview-menu menu-open" >
-								<li><a href="usuario/users"><i class="fa fa-circle-o"></i> Usuários</a></li>	
+								<li><a href="admin/usuario/users"><i class="fa fa-circle-o"></i> Usuários</a></li>	
+							</ul>
+						</li>
+						<li class="treeview">
+							<a href="#">
+								<i class="fa fa-eye"></i>
+								<span>Log</span>
+								<i class="fa fa-angle-left pull-right"></i>
+							</a>
+							<ul class="treeview-menu menu-open" >
+								<li><a href="admin/log/users"><i class="fa fa-circle-o"></i>Atividades</a></li>	
 							</ul>
 						</li>
 					</ul>
