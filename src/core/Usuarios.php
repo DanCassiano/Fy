@@ -14,12 +14,20 @@
 			$this->db = $db;
 		}
 
+		public function login( $email, $senha ){
+			return $this->_login($email, $senha);
+		}
+
 		public function novo( $dados ){
 			return $this->_add($dados);
 		}
 
 		public function edit( $dados ){
 			return $this->update( $dados );
+		}
+
+		private function _login( $email, $senha ){
+			return $this->db->fetchAll('SELECT `id`,`usuario`.`nome` FROM `usuario` WHERE email = ? AND senha = ? AND ativo = 1',array($email, $senha));
 		}
 
 		private function _add( $dados ){

@@ -28,6 +28,18 @@
 			return $this->_updateConteudo($idConteudo, $conteudo);
 		}
 
+		public function registraImagemMenu( $idImagem, $idMenu, $local ){
+			return $this->_registraImagem($idImagem, $idMenu, $local);
+		}
+
+		public function listaImagensMenu( $idMenu, $local){
+			return $this->db->fetchAll('SELECT * FROM imagem inner join imagens_menu im on im.id_imagem = imagem.id WHERE local = ? AND im.id_menu = ?',array($local, $idMenu));
+		}
+
+		private function _registraImagem( $idImagem, $idMenu, $local ){
+			return $this->db->insert( 'imagens_menu', array("id_imagem"=> $idImagem, "id_menu"=> $idMenu, "local"=> $local));
+		}
+
 		private function _addConteudo( $idPagina, $conteudo ){
 			return $this->db->insert( 'conteudo', array("conteudo"=>$conteudo,"id_pagina"=>$idPagina));
 		}
