@@ -4,7 +4,7 @@
 			<div class="box-header">
 				<h3 class="box-title">Usuarios</h3>
 				<div class="pull-right">
-					<form action="usuario/users" id="formStatus">
+					<form action="admin/usuario/users" id="formStatus">
 						<select class="form-control" style="width:200px" name="status" id="selectStatus">
 							<option value="1" <?=$status == 1 ? "selected=selected": "" ?> >Ativos</option>
 							<option value="0" <?=$status == 0 ? "selected=selected": "" ?>>Inativos</option>

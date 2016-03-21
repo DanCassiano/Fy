@@ -40,7 +40,8 @@
 							"pg"=> $pag,
 							'usuarios'=>$usuarios ));
 
-			
+			$temp->js("<script src='{$baseURL}/plugins/iCheck/icheck.min.js'></script>");
+			$temp->css("<link rel=\"stylesheet\" href=\"{$baseURL}/plugins/iCheck/all.css\">");
 			$temp->js("<script src='{$baseURL}/js/usuario/user.js'></script>");
 
 			$temp->setDirTemp( $app['dir'] . "/view/index.php" );

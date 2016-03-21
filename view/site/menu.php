@@ -4,7 +4,7 @@
 			<div class="box-header">
 				<h3 class="box-title">Menus</h3>
 				<div class="pull-right">
-					<form action="site/menu" id="formStatus">
+					<form action="admin/site/menu" id="formStatus">
 						<select class="form-control" style="width:200px" name="status" id="selectStatus">
 							<option value="1" <?=$status == 1 ? "selected=selected": "" ?> >Publicados</option>
 							<option value="0" <?=$status == 0 ? "selected=selected": "" ?>>Não publicados</option>

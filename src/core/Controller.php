@@ -7,6 +7,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
+use Core\Usuarios;
+
 // use Core\Menu;
 
 class Controller implements ControllerProviderInterface {
@@ -35,7 +37,11 @@ class Controller implements ControllerProviderInterface {
 
 		// Login
 			$factory->get('login','Core\Controller::login');
+			$factory->get('logout','Core\Controller::logout');
 			$factory->post('login','Core\Controller::postLogin');
+
+		// upload
+			$factory->post('uploads/{destino}','Core\ControllerUpload::upload');
 
 		return $factory;
 	}
@@ -43,7 +49,6 @@ class Controller implements ControllerProviderInterface {
 	public function home( Application $app ){
 
 		$user = $app['session']->get('user');
-		
 		if( empty($user))
 			return $app->redirect('login');
 
@@ -51,7 +56,10 @@ class Controller implements ControllerProviderInterface {
 		$this->vars = array("baseURL"=> $app['request']->getSchemeAndHttpHost(),
 							"titulo"=> "Fy - HOME",
 							"userImagem"=>'dist/img/user2-160x160.jpg',
-							"userNome"=> "Jordan");
+							"userNome"=>  $user['nome'],
+							"css"=>"",
+							"js"=>"",
+							"action"=>"" );
 		return $this->init();
 	}
 
@@ -100,20 +108,29 @@ class Controller implements ControllerProviderInterface {
 			return $app->redirect('/');
 
 		$this->dir = $app['dir'];
-
 		$this->vars = array("baseURL"=> $app['request']->getSchemeAndHttpHost(),
 							"titulo"=> "Fy - Login",
 							"dir"=> $this->dir);
 		return $this->loginView();
 	}
 
+	public function logout( Application $app ){
+		$app['session']->remove('user' );
+		return $app->redirect("/admin");
+	}
+
 	public function postLogin( Application $app, Request $request ){
 
 		$r = "";
 		parse_str($request->getContent(), $r);
-		$app['session']->set('user', $r );
 
-		return $app->redirect('/');
+		$user = new Usuarios( $app['db']);
+		$usuario = $user->login( $r['email'], md5(md5($r['senha'] )));
+
+		if( !empty($usuario)){
+			$app['session']->set('user', $usuario[0]);
+		}
+		return  $app->redirect('/admin');
 	}
 
 	private function loginView(){
