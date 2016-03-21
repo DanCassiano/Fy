@@ -70,3 +70,26 @@ if (!$schema->tablesExist('usuario')) {
 	));
 
 }
+
+if (!$schema->tablesExist('imagem')) {
+	$imagem = new Table("imagem");
+
+	$imagem->addColumn('id', 'integer', array('unsigned' => true, 'autoincrement' => true));
+	$imagem->setPrimaryKey(array('id'));
+	
+	$imagem->addColumn('imagem', 'string',array("length"=> 50));
+	$imagem->addColumn('dir', 'string',array("length"=> 50));
+	$schema->createTable($imagem);
+
+	if (!$schema->tablesExist('imagens_menu')) {
+
+		$imagemMenu = new Table("imagens_menu");
+
+		$imagemMenu->addColumn('id', 'integer', array('unsigned' => true, 'autoincrement' => true));
+		$imagemMenu->setPrimaryKey(array('id'));
+	
+		$imagemMenu->addColumn('id_imagem', 'integer');
+		$imagemMenu->addColumn('id_menu', 'integer');
+		$schema->createTable($imagemMenu);
+	}
+}
