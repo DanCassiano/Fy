@@ -10,17 +10,17 @@ if (!$schema->tablesExist('paginas')) {
 	$paginas->addColumn('pagina', 'string', array('length' => 100));
 	// $paginas->addUniqueIndex(array('username'));
 	$paginas->addColumn('link', 'string', array('length' => 50));
-	$paginas->addColumn('publicado', 'interger', array('default' => 1));
+	$paginas->addColumn('publicado', 'integer', array('default' => 1));
 	$paginas->addColumn('data_publicacao', 'datetime');
 
 	$schema->createTable($paginas);
 
 	$conteudo = new Table("conteudo");
-	$paginas->addColumn('id', 'integer', array('unsigned' => true, 'autoincrement' => true));
-	$paginas->setPrimaryKey(array('id'));
+	$conteudo->addColumn('id', 'integer', array('unsigned' => true, 'autoincrement' => true));
+	$conteudo->setPrimaryKey(array('id'));
 	
-	$paginas->addColumn('conteudo', 'text');
-	$paginas->addColumn('id_pagina', 'interger', array('unsigned' => true));
+	$conteudo->addColumn('conteudo', 'text');
+	$conteudo->addColumn('id_pagina', 'integer', array('unsigned' => true));
 	
 
 
@@ -37,22 +37,23 @@ if (!$schema->tablesExist('paginas')) {
     // ));
 }
 
+$usuarioTable = "";
 if (!$schema->tablesExist('usuario')) {
 
 
-	$usuario = new Table("usuario");
+	$usuarioTable = new Table("usuario");
 
-	$usuario->addColumn('id', 'integer', array('unsigned' => true, 'autoincrement' => true));
-	$usuario->setPrimaryKey(array('id'));
+	$usuarioTable->addColumn('id', 'integer', array('unsigned' => true, 'autoincrement' => true));
+	$usuarioTable->setPrimaryKey(array('id'));
 	
-	$usuario->addColumn('nome', 'string',array("length"=> 255));
-	$usuario->addColumn('login', 'string',array("length"=> 40));
-	$usuario->addColumn('senha', 'string', array('length' => 50));
-	$usuario->addColumn('email', 'string', array('length' => 50));
-	$usuario->addColumn('ativo', 'integer');
-	$usuario->addColumn('data_cadastro', 'datetime');
+	$usuarioTable->addColumn('nome', 'string',array("length"=> 255));
+	$usuarioTable->addColumn('login', 'string',array("length"=> 40));
+	$usuarioTable->addColumn('senha', 'string', array('length' => 50));
+	$usuarioTable->addColumn('email', 'string', array('length' => 50));
+	$usuarioTable->addColumn('ativo', 'integer');
+	$usuarioTable->addColumn('data_cadastro', 'datetime');
 
-	$schema->createTable($usuario);
+	$schema->createTable($usuarioTable);
 
 	$app['db']->insert('usuario', array(
 		'nome' => 'admin',
@@ -71,15 +72,16 @@ if (!$schema->tablesExist('usuario')) {
 
 }
 
+$imagemTable = "";
 if (!$schema->tablesExist('imagem')) {
-	$imagem = new Table("imagem");
+	$imagemTable = new Table("imagem");
 
-	$imagem->addColumn('id', 'integer', array('unsigned' => true, 'autoincrement' => true));
-	$imagem->setPrimaryKey(array('id'));
+	$imagemTable->addColumn('id', 'integer', array('unsigned' => true, 'autoincrement' => true));
+	$imagemTable->setPrimaryKey(array('id'));
 	
-	$imagem->addColumn('imagem', 'string',array("length"=> 50));
-	$imagem->addColumn('dir', 'string',array("length"=> 50));
-	$schema->createTable($imagem);
+	$imagemTable->addColumn('imagem', 'string',array("length"=> 50));
+	$imagemTable->addColumn('dir', 'string',array("length"=> 50));
+	$schema->createTable($imagemTable);
 
 	if (!$schema->tablesExist('imagens_menu')) {
 
@@ -92,4 +94,18 @@ if (!$schema->tablesExist('imagem')) {
 		$imagemMenu->addColumn('id_menu', 'integer');
 		$schema->createTable($imagemMenu);
 	}
+
+
+}
+
+if ($schema->tablesExist('imagem') &&!$schema->tablesExist('imagens_usuario')) {
+		
+		$imagensUsuario = new Table("imagens_usuario");
+
+		$imagensUsuario->addColumn('id_imagem', 'integer');
+		$imagensUsuario->addColumn('id_usuario', 'integer');
+		// $imagensUsuario->addForeignKeyConstraint($imagemTable, array("id_imagem"), array("id"), array("onUpdate" => "CASCADE"));
+		// $imagensUsuario->addForeignKeyConstraint($usuarioTable, array("id_usuario"), array("id"), array("onUpdate" => "CASCADE"));
+		$schema->createTable($imagensUsuario);
+
 }
