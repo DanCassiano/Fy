@@ -17,8 +17,8 @@
 		<![endif]-->
 		<?=$css?>
 		<link rel="stylesheet" href="<?=$baseURL?>/dist/css/AdminLTE.min.css">
-		<base href="<?=$baseURL?>"></base>
 		<link rel="stylesheet" href="<?=$baseURL?>/dist/css/skins/_all-skins.min.css">
+		<base href="<?=$baseURL?>"></base>
 	</head>
 	<body class="hold-transition skin-blue sidebar-collapse sidebar-mini fixed">
 		<div class="wrapper">
@@ -267,13 +267,13 @@
 					<ul class="sidebar-menu">
 						<!-- <li class="header">MAIN NAVIGATION</li> -->
 						<li class="treeview">
-							<a href="admin">
+							<a href="index.php">
 								<i class="fa fa-dashboard"></i>
 								<span>Dashboard</span>
 								<i class="fa fa-angle-left pull-right"></i>
 							</a>
 						</li>
-						<li>
+						<li class="treeview">
 							<a href="#">
 								<i class="fa fa-laptop"></i>
 								<span>Site</span>
@@ -281,13 +281,13 @@
 							</a>
 							<ul class="treeview-menu">
 								<li class="">
-									<a href="admin/site/menu">
+									<a href="site/menu">
 										<i class="fa fa-circle-o"></i>
 										Menu
 									</a>
 								</li>
 								<li class="">
-									<a href="admin/site/galeria">
+									<a href="site/galeria">
 										<i class="fa fa-circle-o"></i>
 										Imagens
 									</a>
@@ -301,7 +301,7 @@
 								<i class="fa fa-angle-left pull-right"></i>
 							</a>
 							<ul class="treeview-menu menu-open" >
-								<li><a href="admin/usuario/users"><i class="fa fa-circle-o"></i> Usuários</a></li>	
+								<li><a href="usuario/users"><i class="fa fa-circle-o"></i> Usuários</a></li>	
 							</ul>
 						</li>
 						<li class="treeview">
@@ -311,7 +311,7 @@
 								<i class="fa fa-angle-left pull-right"></i>
 							</a>
 							<ul class="treeview-menu menu-open" >
-								<li><a href="admin/log/users"><i class="fa fa-circle-o"></i>Atividades</a></li>	
+								<li><a href="log/users"><i class="fa fa-circle-o"></i>Atividades</a></li>	
 							</ul>
 						</li>
 					</ul>

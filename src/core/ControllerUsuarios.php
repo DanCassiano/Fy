@@ -27,7 +27,7 @@
 
 			$usuarios = $app['db']->fetchAll('SELECT id, nome, email FROM usuario WHERE ativo = ?',array($status));
 
-			$baseURL = $app['request']->getSchemeAndHttpHost();
+			$baseURL = $app['request']->getSchemeAndHttpHost()  . "/admin/"; 
 			$temp = new Temp();
 			$temp->vars(array(
 							"baseURL"=> $baseURL,
@@ -50,7 +50,7 @@
 
 		function operacao( Application $app, $modulo, $operacao ){
 
-			$baseURL = $app['request']->getSchemeAndHttpHost();
+			$baseURL = $app['request']->getSchemeAndHttpHost()  . "/admin/" ;
 			$temp = new Temp();
 			$temp->vars(array(
 							"baseURL"=> $baseURL,
@@ -61,6 +61,9 @@
 							"dir"=> $app['dir'],
 							"db"=>$app['db'],
 							"id"=> $app['request']->get("id"),
+							"usuario"=> $app['db']->fetchAll('SELECT id, nome, email FROM usuario WHERE id = ?',array($app['request']->get("id"))),
+							"userImagem"=>"",
+							"userNome"=>"jordan"
 							));
 			
 			$temp->js("<script src='{$baseURL}/plugins/iCheck/icheck.min.js'></script>");

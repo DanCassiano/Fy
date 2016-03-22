@@ -1,13 +1,16 @@
 <?php 
 	$acao = 'novo';
 
-	if( !empty( $id )){
-		$acao = "edit";
-	}
+	
 
 	$email = "";
 	$nome = "";
 	$senha = "";
+	if( !empty( $id )){
+		$acao = "edit";
+		$nome = $usuario[0]['nome'];
+		$email = $usuario[0]['email'];
+	}
 ?>
 <div class="box box-primary">
 	<div class="box-header with-border">

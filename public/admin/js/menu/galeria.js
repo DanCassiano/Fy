@@ -89,7 +89,7 @@
 					$.each(data,function(i,v){
 						html += "<li>"+
 										"<span class='ordem'>" + (i+1) +  "</span>"+
-										"<img src='upload/" + v.dir + "/" + v.imagem + "'  class='img-thumbnail thumb-galeria ' alt='" + v.imagem + "' />"+
+										"<img src='../upload/" + v.dir + "/" + v.imagem + "'  class='img-thumbnail thumb-galeria ' alt='" + v.imagem + "' />"+
 										"<div class=\"box-foot\">"+
 											"<input class='check-imagem' type=\"checkbox\" value=\""+ v.id +"\" />Selecionar"+
 										"</div>"+

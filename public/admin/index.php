@@ -2,11 +2,10 @@
 	use Symfony\Component\HttpFoundation\Response;
 	use Symfony\Component\HttpFoundation\Request;
 
-
 	require_once '../../vendor/autoload.php';
 	
 	$app = new Silex\Application();
-	$app->register(new Silex\Provider\SessionServiceProvider());	
+	$app->register(new Silex\Provider\SessionServiceProvider());
 	$app->register(new Silex\Provider\DoctrineServiceProvider(), array(
 			'db.options' => array(
 					'driver'    => 'pdo_mysql',
@@ -22,10 +21,10 @@
 	require "../../src/schema.php";
 
 	$app['debug'] = true;
-	$app['dir'] = dirname(dirname(__DIR__));
+	$app['dir'] = dirname(dirname(__DIR__)) . "/public/admin/";
 
 	Request::enableHttpMethodParameterOverride();
-	$app->mount('/', new Core\Controller());
+	$app->mount('/', new Core\ControllerAdmin());
 
 	$app->error(function (\Exception $e, $code) {
 		switch ($code) {

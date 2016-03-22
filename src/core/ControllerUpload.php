@@ -33,7 +33,7 @@
 			
 			$message = array(1,"Sucesso");
 			$files = $request->files->get('uploadFile');
-			$path = $app['dir'] . "/public/upload/";
+			$path = $app['dir'] . "../upload/";
 			if( !file_exists( $path )){
 				mkdir($path);
 			}

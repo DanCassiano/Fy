@@ -14,9 +14,13 @@ use Core\Usuarios;
 class Controller implements ControllerProviderInterface {
 
 	private $dir;
-	private $vars;
-	private $action;
 	
+	private $vars;
+	
+	private $action;
+
+	private $rotas;
+		
 	public function connect(Application $app) {
 
 		$factory=$app['controllers_factory'];
@@ -48,6 +52,8 @@ class Controller implements ControllerProviderInterface {
 
 	public function home( Application $app ){
 
+		
+
 		$user = $app['session']->get('user');
 		if( empty($user))
 			return $app->redirect('login');
@@ -60,7 +66,7 @@ class Controller implements ControllerProviderInterface {
 							"css"=>"",
 							"js"=>"",
 							"action"=>"" );
-		return $this->init();
+		return "";// $this->init();
 	}
 
 	public function action( Application $app, $action, $modulo ){

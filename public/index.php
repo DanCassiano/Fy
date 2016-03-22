@@ -2,11 +2,10 @@
 	use Symfony\Component\HttpFoundation\Response;
 	use Symfony\Component\HttpFoundation\Request;
 
-
 	require_once '../vendor/autoload.php';
 	
 	$app = new Silex\Application();
-	$app->register(new Silex\Provider\SessionServiceProvider());	
+	$app->register(new Silex\Provider\SessionServiceProvider());
 	$app->register(new Silex\Provider\DoctrineServiceProvider(), array(
 			'db.options' => array(
 					'driver'    => 'pdo_mysql',

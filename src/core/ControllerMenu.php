@@ -31,7 +31,7 @@
 				$status = 1;
 
 
-			$baseURL = $app['request']->getSchemeAndHttpHost();
+			$baseURL = $app['request']->getSchemeAndHttpHost() . "/admin/";
 			$temp = new Temp();
 			$vars = array(
 							"baseURL"=> $baseURL,
