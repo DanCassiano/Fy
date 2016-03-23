@@ -68,7 +68,7 @@
 				return $app->redirect('/');
 
 			$this->dir = $app['dir'];
-			$this->vars = array("baseURL"=> $app['request']->getSchemeAndHttpHost(),
+			$this->vars = array("baseURL"=> $app['request']->getSchemeAndHttpHost() . "/admin/",
 								"titulo"=> "Lite - Login",
 								"dir"=> $this->dir);
 			return $this->loginView();
