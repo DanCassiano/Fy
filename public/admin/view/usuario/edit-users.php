@@ -10,6 +10,7 @@
 		$acao = "edit";
 		$nome = $usuario[0]['nome'];
 		$email = $usuario[0]['email'];
+		$imagem =$usuario[0]['imagem'];
 	}
 ?>
 <div class="box box-primary">
@@ -25,6 +26,11 @@
 	<form role="form" action="<?=$baseURL?>/usuario/users/<?=$acao?>" method="post"> 
 		<input type="hidden" name="id" value="<?=$id?>"></input>
 		<div class="box-body">
+			<div class="form-group ">
+				<img src="../upload/usuario/<?=$imagem?>" class="thumbnail pull-left" width="128"  height="128" >
+				<div class="clearfix"></div>
+				<div id="fileuploaderUser" ></div>
+			</div>
 			<div class="form-group">
 				<label for="inputNomeMenu">Nome</label>
 				<input type="text" class="form-control" required id="inputNomeMenu" name="nome"  placeholder="ex: Joao da Silva" value="<?=$nome?>" >

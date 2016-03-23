@@ -21,12 +21,14 @@
 				<table class="table table-hover table-condensed">
 					<tbody>
 						<tr>
+							<th class="text-center"></th>
 							<th>Nome</th>
 							<th>Email</th>
 							<th></th>
 						</tr>
 						<?php foreach ($usuarios as $i => $user ): ?>
 							<tr>
+								<td class="text-center"><img width="64" height="64" src="../upload/usuario/<?=$user['imagem']?>" class="img-circle" ></img></td>
 								<td><?=$user['nome']?></td>
 								<td><?=$user['email']?></td>
 								<td>

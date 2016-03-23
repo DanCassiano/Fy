@@ -14,18 +14,20 @@
 	class ControllerUsuarios  {
 
 		function action( Application $app, $modulo ){
+			$user = $app['session']->get('user');
+		
+			if( empty($user))
+				return $app->redirect('/admin/login');
 
 			$pag =$app['request']->get('pg');
-
 			if( $pag == "")
 				$pag = 1;
 
 			$status = $app['request']->get('status');
-
 			if( $status == "")
 				$status = 1;
 
-			$usuarios = $app['db']->fetchAll('SELECT id, nome, email FROM usuario WHERE ativo = ?',array($status));
+			$usuarios = $app['db']->fetchAll('SELECT id, nome, email, imagem FROM usuario WHERE ativo = ?',array($status));
 
 			$baseURL = $app['request']->getSchemeAndHttpHost()  . "/admin/"; 
 			$temp = new Temp();
@@ -38,7 +40,9 @@
 							"dir"=> $app['dir'],
 							"status"=>$status,
 							"pg"=> $pag,
-							'usuarios'=>$usuarios ));
+							'usuarios'=>$usuarios,
+							"userNome"=> $user['nome'],
+							"userImagem"=>  $user['imagem'] ));
 
 			$temp->js("<script src='{$baseURL}/plugins/iCheck/icheck.min.js'></script>");
 			$temp->css("<link rel=\"stylesheet\" href=\"{$baseURL}/plugins/iCheck/all.css\">");
@@ -50,6 +54,10 @@
 
 		function operacao( Application $app, $modulo, $operacao ){
 
+			$user = $app['session']->get('user');
+		
+			if( empty($user))
+				return $app->redirect('/admin/login');
 			$baseURL = $app['request']->getSchemeAndHttpHost()  . "/admin/" ;
 			$temp = new Temp();
 			$temp->vars(array(
@@ -61,27 +69,33 @@
 							"dir"=> $app['dir'],
 							"db"=>$app['db'],
 							"id"=> $app['request']->get("id"),
-							"usuario"=> $app['db']->fetchAll('SELECT id, nome, email FROM usuario WHERE id = ?',array($app['request']->get("id"))),
-							"userImagem"=>"",
-							"userNome"=>"jordan"
+							"usuario"=> $app['db']->fetchAll('SELECT id, nome, email, imagem FROM usuario WHERE id = ?',array($app['request']->get("id"))),
+							"userNome"=> $user['nome'],
+							"userImagem"=> $user['imagem'] 
 							));
 			
-			$temp->js("<script src='{$baseURL}/plugins/iCheck/icheck.min.js'></script>");
 			$temp->css("<link rel=\"stylesheet\" href=\"{$baseURL}/plugins/iCheck/all.css\">");
+			$temp->css("<link rel=\"stylesheet\" href=\"{$baseURL}/plugins/jquery-upload/uploadfile.css\">");
+
+			$temp->js("<script src='{$baseURL}/plugins/iCheck/icheck.min.js'></script>");
+			$temp->js("<script src='{$baseURL}/plugins/jquery-upload/jquery.uploadfile.min.js'></script>");
 			$temp->js("<script src='{$baseURL}/js/usuario/user.js'></script>");
 			$temp->setDirTemp( $app['dir'] . "/view/index.php" );
 			return $temp->init();
 		}
 
 		public function postUsuario( Application $app, Request $request, $operacao ){
-			$class = new \Core\Usuarios( $app['db'] );
+			$usuario = new \Core\Usuarios( $app['db'] );
 			parse_str($request->getContent(), $r);
 			if( $operacao == 'novo'){
-				$class->novo($r);
+				$usuario->novo($r);
 			}
-			if( $operacao == 'edit'){
+			elseif( $operacao == 'edit'){
 
 				
+			}
+			elseif( $operacao == 'imagem'){
+				$usuario->setImagem($r['id'],$r['imagem']);
 			}
 			return $app->redirect('/usuario/users');
 		}

@@ -55,7 +55,9 @@
 								"userImagem"=>"",
 								"userNome"=>"",
 								"action"=>"",
-								"modulo"=>""));
+								"modulo"=>"",
+								"userImagem"=> $user['imagem'], 
+								"userNome"=> $user['nome']));
 			$temp->setDirTemp( $app['dir'] . "view/index.php");
 			return $temp->init();
 		}
@@ -65,10 +67,10 @@
 			$user = $app['session']->get('user');
 		
 			if( !empty($user))
-				return $app->redirect('/');
+				return $app->redirect('/admin');
 
 			$this->dir = $app['dir'];
-			$this->vars = array("baseURL"=> $app['request']->getSchemeAndHttpHost(),
+			$this->vars = array("baseURL"=> $app['request']->getSchemeAndHttpHost() . "/admin/",
 								"titulo"=> "Lite - Login",
 								"dir"=> $this->dir);
 			return $this->loginView();

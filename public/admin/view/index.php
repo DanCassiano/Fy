@@ -211,13 +211,13 @@
 							<!-- User Account: style can be found in dropdown.less -->
 							<li class="dropdown user user-menu">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-									<img src="<?=$userImagem?>" class="user-image" alt="<?=$userNome?>">
+									<img src="../upload/usuario/<?=$userImagem?>" class="user-image" alt="<?=$userNome?>">
 									<span class="hidden-xs"><?=$userNome?></span>
 								</a>
 								<ul class="dropdown-menu">
 									<!-- User image -->
 									<li class="user-header">
-										<img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+										<img src="../upload/usuario/<?=$userImagem?>" class="img-circle" alt="User Image">
 										<p><?=$userNome?></p>
 									</li>
 									<!-- Menu Footer-->
@@ -226,7 +226,7 @@
 											<a href="#" class="btn btn-default btn-flat">Profile</a>
 										</div> -->
 										<div class="pull-right">
-											<a href="admin/logout" class="btn btn-default btn-flat">Sair</a>
+											<a href="logout" class="btn btn-default btn-flat">Sair</a>
 										</div>
 									</li>
 								</ul>
