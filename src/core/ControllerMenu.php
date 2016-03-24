@@ -18,7 +18,7 @@
 			$user = $app['session']->get('user');
 		
 		if( empty($user))
-			return $app->redirect('/login');
+			return $app->redirect('/admin/login');
 
 			$pag =$app['request']->get('pg');
 
@@ -51,8 +51,7 @@
 				
 				$vars['paginas'] = $app['db']->fetchAll('SELECT id, pagina, publicado, date_format( data_criacao, "%d-%m-%Y %H:%m:%s")as data_criacao FROM paginas WHERE publicado = ?',array($status));
 			}
-
-			if( $modulo == "galeria") {
+			elseif( $modulo == "galeria") {
 
 				$temp->css("<link rel=\"stylesheet\" href=\"{$baseURL}/plugins/jquery-upload/uploadfile.css\">");
 				$temp->css("<link rel=\"stylesheet\" href=\"{$baseURL}/plugins/select2/select2.min.css\">");
@@ -63,6 +62,19 @@
 				$temp->js("<script src='{$baseURL}/js/menu/galeria.js'></script>");
 
 				$vars['paginas'] = $app['db']->fetchAll('SELECT * FROM paginas WHERE publicado = ?',array($status));
+			}
+			elseif( $modulo == "departamentos") {
+				if( $status == 0)
+					$status = 'S';
+				else
+					$status = 'N';
+				$temp->css("<link rel=\"stylesheet\" href=\"{$baseURL}plugins/datatables/dataTables.bootstrap.css\">");
+				$temp->js("<script src='{$baseURL}plugins/datatables/jquery.dataTables.min.js'></script>");
+				$temp->js("<script src='{$baseURL}/js/menu/departamentos.js'></script>");
+				$vars['departamentos'] = $app['db']->fetchAll('SELECT * FROM departamentos WHERE bloqueado = ?',array($status));
+			}
+			elseif( $modulo == "faleconosco") {
+				$vars['faleconosco'] = $app['db']->fetchAll('SELECT * FROM fale_conosco WHERE lido = ?',array(!$status));				
 			}
 			
 			$temp->vars( $vars);
@@ -77,7 +89,7 @@
 			if( empty($user))
 				return $app->redirect('/login');
 
-			$baseURL = $app['request']->getSchemeAndHttpHost();
+			$baseURL = $app['request']->getSchemeAndHttpHost() . "/admin/";
 			$temp = new Temp();
 			$temp->vars(array(
 							"baseURL"=> $baseURL,

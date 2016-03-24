@@ -26,11 +26,13 @@
 				$factory->get('site/{modulo}/','Core\ControllerMenu::action');
 				$factory->get('site/{modulo}/{operacao}','Core\ControllerMenu::operacao');
 				$factory->post('site/menu/{operacao}','Core\ControllerMenu::postMenu');
+
 		
 			// Usuario
 				$factory->get('usuario/{modulo}/','Core\ControllerUsuarios::action');
 				$factory->get('usuario/{modulo}/{operacao}','Core\ControllerUsuarios::operacao');
 				$factory->post('usuario/users/{operacao}','Core\ControllerUsuarios::postUsuario');
+
 
 			// Login
 				$factory->get('login','Core\ControllerAdmin::login');
