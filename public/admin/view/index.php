@@ -364,9 +364,9 @@
 				<section class="content">
 					<?php
 						if( !empty($action ) && empty($operacao))
-							require $dir . "/view/" . $action . "/" . $modulo . ".php"; 
+							require $dir . "view/" . $action . "/" . $modulo . ".php"; 
 						elseif( !empty($action ) && !empty($operacao))
-							require $dir . "/view/" . $action . "/edit-" . $modulo . ".php"; 
+							require $dir . "view/" . $action . "/{$operacao}-" . $modulo . ".php"; 
 					?>
 				</section><!-- /.content -->
 			</div><!-- /.content-wrapper -->
