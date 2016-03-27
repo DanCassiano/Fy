@@ -30,7 +30,7 @@
 	</div>
 	<!-- /.box-header -->
 	<!-- form start -->
-	<form role="form" action="<?=$baseURL?>/site/menu/<?=$acao?>" method="post"> 
+	<form role="form" action="<?=$baseURL?>site/menu/<?=$acao?>" method="post"> 
 		<input type="hidden" name="id" value="<?=$id?>"></input>
 		<input type="hidden" name="idConteudo" value="<?=$idConteudo?>"></input>
 		<div class="box-body">

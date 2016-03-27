@@ -17,8 +17,8 @@
 
 			$user = $app['session']->get('user');
 		
-		if( empty($user))
-			return $app->redirect('/admin/login');
+			if( empty($user))
+				return $app->redirect('/admin/login');
 
 			$pag =$app['request']->get('pg');
 
@@ -33,8 +33,7 @@
 
 			$baseURL = $app['request']->getSchemeAndHttpHost() . "/admin/";
 			$temp = new Temp();
-			$vars = array(
-							"baseURL"=> $baseURL,
+			$vars = array(	"baseURL"=> $baseURL,
 							"titulo"=> "Fy",
 							"action"=> "site",
 							"modulo"=> $modulo,
@@ -42,8 +41,8 @@
 							"dir"=> $app['dir'],
 							"status"=>$status,
 							"pg"=> $pag,
-							"userImagem"=>'dist/img/user2-160x160.jpg',
-							"userNome"=> "Jordan" );
+							"userImagem"=> $user['imagem'],
+							"userNome"=> $user['nome'] );
 
 			if( $modulo == "menu") {
 				$temp->js("<script src='{$baseURL}/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js'></script>");
@@ -64,17 +63,19 @@
 				$vars['paginas'] = $app['db']->fetchAll('SELECT * FROM paginas WHERE publicado = ?',array($status));
 			}
 			elseif( $modulo == "departamentos") {
-				if( $status == 0)
-					$status = 'S';
-				else
+				
+				if( $status == 1){
 					$status = 'N';
+				}
 				$temp->css("<link rel=\"stylesheet\" href=\"{$baseURL}plugins/datatables/dataTables.bootstrap.css\">");
-				$temp->js("<script src='{$baseURL}plugins/datatables/jquery.dataTables.min.js'></script>");
+				$temp->js("<script src='{$baseURL}plugins/datatables/dataTables.bootstrap.min.js'></script>");
+				// $temp->js("<script src='{$baseURL}plugins/datatables/jquery.dataTables.min.js'></script>");
 				$temp->js("<script src='{$baseURL}/js/menu/departamentos.js'></script>");
-				$vars['departamentos'] = $app['db']->fetchAll('SELECT * FROM departamentos WHERE bloqueado = ?',array($status));
+
+				$vars['departamentos'] = $app['db']->fetchAll('SELECT * FROM departamentos WHERE bloqueado = ? ',array($status));
 			}
 			elseif( $modulo == "faleconosco") {
-				$vars['faleconosco'] = $app['db']->fetchAll('SELECT * FROM fale_conosco WHERE lido = ?',array(!$status));				
+				$vars['faleconosco'] = $app['db']->fetchAll('SELECT * FROM fale_conosco WHERE lido = ?',array($status));				
 			}
 			
 			$temp->vars( $vars);
@@ -82,16 +83,16 @@
 			return $temp->init();
 		}
 
-		function operacao( Application $app, $modulo, $operacao ){
+		public function operacao( Application $app, $modulo, $operacao ){
 
 			$user = $app['session']->get('user');
-		
 			if( empty($user))
 				return $app->redirect('/login');
 
 			$baseURL = $app['request']->getSchemeAndHttpHost() . "/admin/";
+			$id = $app['request']->get('id');
 			$temp = new Temp();
-			$temp->vars(array(
+			$vars = array(
 							"baseURL"=> $baseURL,
 							"titulo"=> "Fy",
 							"action"=> "site",
@@ -100,13 +101,37 @@
 							"dir"=> $app['dir'],
 							"db"=>$app['db'],
 							"id"=> $app['request']->get("id"),
-							"userImagem"=>'dist/img/user2-160x160.jpg',
-							"userNome"=> "Jordan"
-							));
+							"userImagem"=>$user['imagem'],
+							"userNome"=> $user['nome']
+							);
+			
+			if( $modulo == "departamentos") {
+				if( $operacao == 'edit' ){
+					$temp->js("<script src='{$baseURL}/js/menu/departamentos.js'></script>");
+					$vars['departamento'] = $app['db']->fetchAll('SELECT * FROM departamentos WHERE id = ?',array($id));
+				}
+				elseif( $operacao == 'contatos'){
+
+					$idDep = $app['request']->get('idDep');
+					$vars['departamento'] = $app['db']->fetchAll('SELECT departamento FROM departamentos WHERE id = ?',array($idDep));
+					$vars['departamento'] = $vars['departamento'][0]['departamento'];
+					
+					$sql = "SELECT contatos.`id`, contatos.`contato`, contatos.`nome`
+							FROM contatos
+							LEFT JOIN contatos_departamento cp ON cp.`id_contato` = contatos.`id`
+							WHERE cp.`id_departamento` = ?";
+					$vars['contatos'] = $app['db']->fetchAll($sql,array($idDep));
+					$vars['idDep']= $idDep;
+					$temp->js("<script src='{$baseURL}/js/menu/contatos.js'></script>");
+
+				}
+			}
+
+
 			$temp->js("<script src='{$baseURL}/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js'></script>");
 			$temp->js("<script src='{$baseURL}/js/menu/menu.js'></script>");
 			$temp->css("<link rel='stylesheet' href='{$baseURL}/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css'>");
-
+			$temp->vars( $vars);
 			$temp->setDirTemp( $app['dir'] . "/view/index.php" );
 			return $temp->init();
 		}
@@ -119,7 +144,7 @@
 				$idPagina = $menu->novo( $r );
 				if( $r['conteudo'] )
 					$menu->addConteudo( $idPagina, $r['conteudo'] );
-				return $app->redirect('/site/menu');
+				return $app->redirect('/admin/site/menu');
 			}
 			elseif( $operacao == 'edit') {
 				parse_str($request->getContent(), $r);
@@ -129,7 +154,7 @@
 				else {
 					$menu->updateConteudo( $r['idConteudo'] , $r['conteudo']);
 				}
-				return $app->redirect('/site/menu');
+				return $app->redirect('/admin/site/menu');
 			}
 			elseif($operacao == "imagem") {
 				parse_str($request->getContent(), $r);
@@ -144,5 +169,49 @@
 					return $app->json( $menu->listaImagensMenu( $r['idMenu'], $r['local'] ) );
 				}
 			}
+		}
+
+		public function postDepartamento( Application $app, Request $request, $operacao  ){
+
+			$dep = new Departamento( $app['db'] );
+			parse_str($request->getContent(), $r);
+			if( $operacao == 'novo') {
+				$id = $dep->add( array('departamento'=> $r['departamento'], 'bloqueado'=> $r['bloqueado']));
+				return $app->redirect('/admin/site/departamentos');
+			}
+			elseif( $operacao == 'edit') {
+				$dep->edit( array(
+									'id'=> $r['id'],
+									'departamento'=> $r['departamento'], 
+									'bloqueado'=> $r['bloqueado'] ) 
+						);
+				return $app->redirect('/admin/site/departamentos');
+			}
+			elseif( $operacao == 'del') {
+			}
+			return "" ;
+		}
+
+		public function postContato( Application $app, Request $request, $operacao  ){
+			$cont = new Contato($app['db']);
+
+			if( $operacao == 'salvar') {
+
+				parse_str($request->getContent(), $r);
+				if( empty($r['id'])){
+					$dep = new Departamento($app['db']);
+					$idContato = $cont->add( array('nome'=> $r['nome'], 'contato'=> $r['email'] ) );
+					$dep->vincularContato( $r['idDep'], $idContato );
+					$resposta = array("status"=> 1);
+				}
+				else{
+					$re = $cont->edit( array('id'=> $r['id'], 'nome'=> $r['nome'], 'contato'=> $r['email'] ) );
+					$resposta = array("status"=> $re);
+				}
+
+				return $app->json( $resposta );
+			}
+
+			return "" ;
 		}
 	}

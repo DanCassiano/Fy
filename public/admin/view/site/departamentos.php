@@ -1,3 +1,4 @@
+
 <div class="row">
 	<div class="col-xs-12">
 		<div class="box box-solid">
@@ -6,8 +7,8 @@
 				<div class="pull-right">
 					<form action="<?=$baseURL?>site/departamentos" id="formStatus">
 						<select class="form-control" style="width:200px" name="status" id="selectStatus">
-							<option value="1" <?=$status == 1 ? "selected=selected": "" ?> >Ativos</option>
-							<option value="0" <?=$status == 0 ? "selected=selected": "" ?>>Inativos</option>
+							<option value="N" <?=$status == 'N' ? "selected=selected": "" ?> >Ativos</option>
+							<option value="S" <?=$status == 'S' ? "selected=selected": "" ?>>Inativos</option>
 						</select>
 					</form>
 				</div>
@@ -30,7 +31,7 @@
 								<td>
 									<a href="<?=$baseURL?>site/departamentos/edit?id=<?=$dep['id']?>" class="btn btn-link btn-xs">Editar</a>
 									<a href="#edit" id='<?=$dep['id']?>' class="btn btn-link btn-xs"  >Remover</a>
-									<a href="#edit" id='<?=$dep['id']?>' class="btn btn-link btn-xs"  >Contatos</a>
+									<a href="<?=$baseURL?>site/departamentos/contatos?idDep=<?=$dep['id']?>" id='<?=$dep['id']?>' class="btn btn-link btn-xs"  >Contatos</a>
 								</td>
 							</tr>
 						<?php endforeach ?>

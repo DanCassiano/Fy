@@ -12,7 +12,7 @@
 					</form>
 				</div>
 				<div class="pull-right" style="margin-right:5px;">
-					<a href="<?=$baseURL?>/site/menu/novo" class="btn btn-success">Novo</a>
+					<a href="<?=$baseURL?>site/menu/novo" class="btn btn-success">Novo</a>
 				</div>
 			</div>
 			<!-- /.box-header -->
@@ -38,7 +38,7 @@
 									<?php } ?>
 								</td>
 								<td>
-									<a href="<?=$baseURL?>/site/menu/edit?id=<?=$pagina['id']?>" class="btn btn-link btn-xs">Editar</a>
+									<a href="<?=$baseURL?>site/menu/edit?id=<?=$pagina['id']?>" class="btn btn-link btn-xs">Editar</a>
 									<a href="#edit" id='<?=$pagina['id']?>' class="btn btn-link btn-xs"  >Remover</a>
 								</td>
 							</tr>

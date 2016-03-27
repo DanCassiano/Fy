@@ -1,9 +1,12 @@
 <?php 
-	$acao = 'novo';
-	$contato = "";
+	$acao = 'novo';	
+	$nomeDepartamento = "";
+	$bloqueado = 'N';
 	
 	if( !empty( $id )){
-		$acao = "edit";		
+		$acao = "edit";
+		$nomeDepartamento = $departamento[0]['departamento'];
+		$bloqueado = $departamento[0]['bloqueado'];
 	}
 ?>
 <div class="box box-primary">
@@ -21,11 +24,11 @@
 		<div class="box-body">
 			<div class="form-group">
 				<label for="inputContato">Contato</label>
-				<input type="text" class="form-control" required id="inputContato" name="contato"  placeholder="ex: Contato" value="<?=$contato?>" >
+				<input type="text" class="form-control" required id="inputContato" name="departamento"  placeholder="ex: Contato" value="<?=$nomeDepartamento?>" >
 			</div>
 			<div class="checkbox">
 				<label>
-					<input type="checkbox" checked name='ativo'> Ativo
+					<input type="checkbox" <?php echo $bloqueado == 'N' ? "checked='checked'" : "" ?>  value="<?=$bloqueado?>" name='bloqueado'> Ativo
 				</label>
 			</div>
 		</div>
