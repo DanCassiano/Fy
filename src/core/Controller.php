@@ -27,22 +27,8 @@ class Controller implements ControllerProviderInterface {
 		$this->dir = $app['dir'];
 
 		//Home
-			$factory->get('/','Core\Controller::home');
-		
-		// site
-			$factory->get('site/{modulo}/','Core\ControllerMenu::action');
-			$factory->get('site/{modulo}/{operacao}','Core\ControllerMenu::operacao');
-			$factory->post('site/menu/{operacao}','Core\ControllerMenu::postMenu');
-		
-		// Usuario
-			$factory->get('usuario/{modulo}/','Core\ControllerUsuarios::action');
-			$factory->get('usuario/{modulo}/{operacao}','Core\ControllerUsuarios::operacao');
-			$factory->post('usuario/users/{operacao}','Core\ControllerUsuarios::postUsuario');
-
-		// Login
-			$factory->get('login','Core\Controller::login');
-			$factory->get('logout','Core\Controller::logout');
-			$factory->post('login','Core\Controller::postLogin');
+			$factory->get('/','Core\Controller::pagina');
+			$factory->get('/{action}','Core\Controller::pagina');
 
 		// upload
 			$factory->post('uploads/{destino}','Core\ControllerUpload::upload');
@@ -88,74 +74,32 @@ class Controller implements ControllerProviderInterface {
 							"pg"=>$app['request']->get('pg'));
 		return $this->init();
 	}
-	public function actionModulo( Application $app, $action, $modulo, $operacao ){
-		$this->dir = $app['dir'];
+	
 
-		$this->vars = array("baseURL"=> $app['request']->getSchemeAndHttpHost(),
-							"titulo"=> "Fy - " . $modulo,
-							"action"=> $action,
-							"modulo"=> $modulo,
-							"operacao"=>$operacao,
-							"dir"=> $this->dir,
-							"db"=>$app['db'],
-							"id"=> $app['request']->get('id'));
-		return $this->init();
-	}
+	public function pagina( Application $app, $action = "" ){
+			$temp = new Temp();
+			$var = array("titulo"=> "HOME",
+						"dir"=> $app['dir'], 
+						'baseURL' => $app['request']->getSchemeAndHttpHost() );
 
-	private function modulo( $action, $modulo ){
-		require $this->dir . "/" . $action . "/" . $modulo . ".php";
-	}
-
-	public function login(Application $app ){
+		$menu = $app['db']->fetchAll('SELECT conteudo, tipo FROM paginas LEFT JOIN conteudo ON conteudo.id_pagina =  paginas.id WHERE link= ?',array($action));
 		
-		$user = $app['session']->get('user');
-		
-		if( !empty($user))
-			return $app->redirect('/');
-
-		$this->dir = $app['dir'];
-		$this->vars = array("baseURL"=> $app['request']->getSchemeAndHttpHost(),
-							"titulo"=> "Fy - Login",
-							"dir"=> $this->dir);
-		return $this->loginView();
-	}
-
-	public function logout( Application $app ){
-		$app['session']->remove('user' );
-		return $app->redirect("/admin");
-	}
-
-	public function postLogin( Application $app, Request $request ){
-
-		$r = "";
-		parse_str($request->getContent(), $r);
-
-		$user = new Usuarios( $app['db']);
-		$usuario = $user->login( $r['email'], md5(md5($r['senha'] )));
-
-		if( !empty($usuario)){
-			$app['session']->set('user', $usuario[0]);
+		if( $action == "" || file_exists( $app['dir'] . "/" .$menu[0]['tipo'] . ".php" )) {
+			$paginas = $app['db']->fetchAll('SELECT paginas.id, pagina, link, conteudo, tipo FROM paginas LEFT JOIN conteudo ON conteudo.id_pagina =  paginas.id WHERE publicado =1',array(1));
+			$var["paginas"]=$paginas;
+			$var["pagina"]=$menu[0];
+			$var['action'] = $menu[0]['tipo'];
 		}
-		return  $app->redirect('/admin');
-	}
+		else
+			$var['action'] = "404";
+		if( $action == "contato")
+		{
+			$temp->js("<script src='{$baseURL}/assets/js/ap.js'></script>");
+		}
+		$temp->js("<script src='{$baseURL}/assets/js/ap.js'></script>");
 
-	private function loginView(){
-		ob_start();
-		extract($this->vars);
-		require $this->dir . "/view/login.php";
-		$pag = ob_get_contents();
-		ob_end_clean();
-
-		return $pag;
-	}
-
-	private function init(){
-		ob_start();
-		extract($this->vars);
-		require $this->dir . "/view/index.php";
-		$pag = ob_get_contents();
-		ob_end_clean();
-
-		return $pag;
+		$temp->vars( $var);
+		$temp->setDirTemp( $app['dir'] . "index.php" );
+		return $temp->init();
 	}
 }

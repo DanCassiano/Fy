@@ -21,7 +21,7 @@
 	require "../src/schema.php";
 
 	$app['debug'] = true;
-	$app['dir'] = dirname(__DIR__);
+	$app['dir'] = dirname(__DIR__) . "/public/site/";
 
 	Request::enableHttpMethodParameterOverride();
 	$app->mount('/', new Core\Controller());

@@ -26,6 +26,8 @@
 				$factory->get('site/{modulo}/','Core\ControllerMenu::action');
 				$factory->get('site/{modulo}/{operacao}','Core\ControllerMenu::operacao');
 				$factory->post('site/menu/{operacao}','Core\ControllerMenu::postMenu');
+				$factory->post('site/departamentos/{operacao}','Core\ControllerMenu::postDepartamento');
+				$factory->post('site/departamentos/contatos/{operacao}','Core\ControllerMenu::postContato');
 
 		
 			// Usuario
@@ -38,6 +40,11 @@
 				$factory->get('login','Core\ControllerAdmin::login');
 				$factory->get('logout','Core\ControllerAdmin::logout');
 				$factory->post('login','Core\ControllerAdmin::postLogin');
+
+			//Log de arividades
+				$factory->get('log/{modulo}/','Core\ControllerLog::action');
+				// $factory->get('logout','Core\ControllerAdmin::logout');
+				// $factory->post('login','Core\ControllerAdmin::postLogin');
 
 			// upload
 				$factory->post('uploads/{destino}','Core\ControllerUpload::upload');
@@ -54,11 +61,9 @@
 			$temp = new Temp();
 			$temp->vars( array('titulo'=> "Lite - Dashboard",
 								'baseURL'=> $app['request']->getSchemeAndHttpHost() . "/admin/",
-								"userImagem"=>"",
-								"userNome"=>"",
 								"action"=>"",
 								"modulo"=>"",
-								"userImagem"=> $user['imagem'], 
+								"userImagem"=> $user['imagem'],
 								"userNome"=> $user['nome']));
 			$temp->setDirTemp( $app['dir'] . "view/index.php");
 			return $temp->init();
@@ -74,7 +79,9 @@
 			$this->dir = $app['dir'];
 			$this->vars = array("baseURL"=> $app['request']->getSchemeAndHttpHost() . "/admin/",
 								"titulo"=> "Lite - Login",
-								"dir"=> $this->dir);
+								"dir"=> $this->dir,
+								"userImagem"=> $user['imagem'],
+								"userNome"=> $user['nome']);
 			return $this->loginView();
 		}
 
