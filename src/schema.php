@@ -94,8 +94,6 @@ if (!$schema->tablesExist('imagem')) {
 		$imagemMenu->addColumn('id_menu', 'integer');
 		$schema->createTable($imagemMenu);
 	}
-
-
 }
 
 if ($schema->tablesExist('imagem') &&!$schema->tablesExist('imagens_usuario')) {
