@@ -26,6 +26,7 @@
 				$factory->get('site/{modulo}/','Core\ControllerMenu::action');
 				$factory->get('site/{modulo}/{operacao}','Core\ControllerMenu::operacao');
 				$factory->post('site/menu/{operacao}','Core\ControllerMenu::postMenu');
+				
 				$factory->post('site/departamentos/{operacao}','Core\ControllerMenu::postDepartamento');
 				$factory->post('site/departamentos/contatos/{operacao}','Core\ControllerMenu::postContato');
 

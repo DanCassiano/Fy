@@ -12,22 +12,28 @@
 					</form>
 				</div>
 				<div class="pull-right" style="margin-right:5px;">
-					<a href="<?=$baseURL?>site/menu/novo" class="btn btn-success">Novo</a>
+					<a href="<?=$baseURL?>site/menu/edit" class="btn btn-success">Novo</a>
+				</div>
+				<div class="pull-right" style="margin-right:5px;">
+					<button class="btn btn-default btn-up" disabled title="Subir menu" > <i class="glyphicon glyphicon-arrow-up"></i> </button>
+					<button class="btn btn-default btn-down" disabled title="Descer menu"> <i class="glyphicon glyphicon-arrow-down"></i> </button>
 				</div>
 			</div>
 			<!-- /.box-header -->
 			<div class="box-body table-responsive">
 			
-				<table class="table table-hover table-condensed">
+				<table class="table table-hover table-bordered">
 					<tbody>
 						<tr>
+							<th><input type="checkbox" class="toggle-check" ></th>
 							<th>Menu</th>
 							<th>Data</th>
 							<th>Status</th>
-							<th></th>
+							<th style="width:220px; "></th>
 						</tr>
 						<?php foreach ($paginas as $i => $pagina ): ?>
 							<tr>
+								<td><input type="checkbox" class='check-menu' data-ordem="<?=$pagina['ordem']?>" data-id="<?=$pagina['id']?>"></td>
 								<td><?=$pagina['pagina']?></td>
 								<td><?=$pagina['data_criacao']?></td>
 								<td>
@@ -39,7 +45,12 @@
 								</td>
 								<td>
 									<a href="<?=$baseURL?>site/menu/edit?id=<?=$pagina['id']?>" class="btn btn-link btn-xs">Editar</a>
-									<a href="#edit" id='<?=$pagina['id']?>' class="btn btn-link btn-xs"  >Remover</a>
+									<a href="#remover" id='<?=$pagina['id']?>' data-menu="<?=$pagina['pagina']?>" data-toggle="modal" data-target="#modalMenu" data-whatever="Remover menu " class="btn btn-link btn-xs"  >Remover</a>
+									<?php if( $status == 1){ ?>
+										<a href="#despublicar" id='<?=$pagina['id']?>' data-menu="<?=$pagina['pagina']?>" data-toggle="modal" data-target="#modalMenu" data-whatever="Despublicar menu " class="btn btn-danger btn-xs"  >Despublicar</a>
+									<?php }else{ ?>
+										<a href="#publicar" id='<?=$pagina['id']?>' data-menu="<?=$pagina['pagina']?>" data-toggle="modal" data-target="#modalMenu" data-whatever="Publicar menu " class="btn btn-success btn-xs"  >Publicar</a>									
+									<?php } ?>
 								</td>
 							</tr>
 						<?php endforeach ?>
@@ -60,3 +71,24 @@
 		<!-- /.box -->
 	</div>
 </div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="modalMenu">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title">Contato</h4>
+			</div>
+			<div class="modal-body">
+				<p id="msg"></p>
+				<input type="hidden" id="idMenuRemover">
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-link" data-dismiss="modal">Cancelar</button>
+				<button type="button" class="btn btn-primary btn-bloquear-menu" >Despublicar</button>
+				<button type="button" class="btn btn-primary btn-desbloquear-menu" >Publicar</button>
+				<button type="button" class="btn btn-primary btn-op-remover" >Remover</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

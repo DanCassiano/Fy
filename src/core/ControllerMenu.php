@@ -76,6 +76,12 @@
 			elseif( $modulo == "faleconosco") {
 				$vars['faleconosco'] = $app['db']->fetchAll('SELECT * FROM fale_conosco WHERE lido = ?',array($status));				
 			}
+			elseif( $modulo == "publicidade") {
+				$perfil = new Perfil( $app['db']);
+				$publ = new Publicidade($app['db']);
+				$vars['perfis'] = $perfil->listPerfilt();
+				$vars['publicidades'] = $publ->listPublicidades();
+			}
 			
 			$temp->vars( $vars);
 			$temp->setDirTemp( $app['dir'] . "/view/index.php" );
@@ -105,6 +111,7 @@
 							);
 			
 			if( $modulo == "departamentos") {
+
 				if( $operacao == 'edit' ){
 					$temp->js("<script src='{$baseURL}/js/menu/departamentos.js'></script>");
 					$vars['departamento'] = $app['db']->fetchAll('SELECT * FROM departamentos WHERE id = ?',array($id));
@@ -122,10 +129,8 @@
 					$vars['contatos'] = $app['db']->fetchAll($sql,array($idDep));
 					$vars['idDep']= $idDep;
 					$temp->js("<script src='{$baseURL}/js/menu/contatos.js'></script>");
-
 				}
 			}
-
 
 			$temp->js("<script src='{$baseURL}/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js'></script>");
 			$temp->js("<script src='{$baseURL}/js/menu/menu.js'></script>");

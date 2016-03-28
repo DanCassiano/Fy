@@ -70,10 +70,9 @@
 			
 			$statement = $this->db->executeQuery('SELECT id, ordem FROM paginas WHERE ordem = ? ', array( $odemMenu -1 ));
 			$menuAlterar = $statement->fetch();
+			$this->db->update('paginas', array('ordem'=> $menuAlterar['ordem'] + 1 ), array('id'=> $menuAlterar['id']));
 
-			$this->db->update('paginas', array('ordem'=> $odemMenu -1 ), array('id'=> $idMenu));
-			
-			return $this->db->update('paginas', array('ordem'=> $menuAlterar['ordem'] + 1 ), array('id'=> $menuAlterar['id']));
+			return $this->db->update('paginas', array('ordem'=> $odemMenu -1 ), array('id'=> $idMenu));			
 		}
 
 		public function descer( $idMenu ){
@@ -105,11 +104,19 @@
 
 		private function _add( $dados ){
 			
+			$statement = $this->db->executeQuery('SELECT ordem FROM paginas WHERE publicado ORDER BY ordem DESC LIMIT 1', array( $dados['status'] ));
+			$ordemMenu = $menuAtual['ordem'];
+			if( empty($odemMenu ))
+				$ordemMenu = 1;
+			else
+				$ordemMenu = $ordemMenu+1;
+
 			return $this->db->insert( 'paginas', array(
 				"pagina"=>$dados['nome'],
 				"link"=>$dados['link'],
 				"publicado"=>$dados['status'],
-				"data_criacao"=> date("Y-m-d H:m:s") ));
+				"data_criacao"=> date("Y-m-d H:m:s"),
+				"ordem"=> $ordemMenu ));
 		}
 
 		private function update( $dados ){

@@ -19,7 +19,7 @@
 			<!-- /.box-header -->
 			<div class="box-body table-responsive">
 			
-				<table class="table table-hover table-condensed" id="tableDepartamento" style="width: 100%;">
+				<table class="table table-hover table-bordered" id="tableDepartamento" style="width: 100%;">
 					<tbody>
 						<tr>
 							<th>Departamento</th>
