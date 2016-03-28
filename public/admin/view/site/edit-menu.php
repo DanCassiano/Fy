@@ -6,6 +6,7 @@
 	$status = 1;
 	$acao = "novo";
 	$conteudo = "";
+	$idConteudo = "";
 	if( !empty( $id )){
 		$pagina = $db->fetchAll('SELECT paginas.id, pagina, link, publicado, conteudo.conteudo, conteudo.id as id_conteudo
 								FROM paginas 

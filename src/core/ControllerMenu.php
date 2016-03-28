@@ -15,18 +15,17 @@
 
 		function action( Application $app, $modulo ){
 
+			$menu = new Menu( $app['db']);
+
 			$user = $app['session']->get('user');
-		
 			if( empty($user))
 				return $app->redirect('/admin/login');
 
 			$pag =$app['request']->get('pg');
-
 			if( $pag == "")
 				$pag = 1;
 
 			$status = $app['request']->get('status');
-
 			if( $status == "")
 				$status = 1;
 
@@ -48,7 +47,7 @@
 				$temp->js("<script src='{$baseURL}/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js'></script>");
 				$temp->js("<script src='{$baseURL}/js/menu/menu.js'></script>");
 				
-				$vars['paginas'] = $app['db']->fetchAll('SELECT id, pagina, publicado, date_format( data_criacao, "%d-%m-%Y %H:%m:%s")as data_criacao FROM paginas WHERE publicado = ?',array($status));
+				$vars['paginas'] = $menu->listaMenus( $status );
 			}
 			elseif( $modulo == "galeria") {
 
@@ -139,15 +138,14 @@
 		public function postMenu( Application $app, Request $request, $operacao ){
 
 			$menu = new \Core\Menu( $app['db'] );
+			parse_str($request->getContent(), $r);
 			if( $operacao == 'novo') {
-				parse_str($request->getContent(), $r);
 				$idPagina = $menu->novo( $r );
 				if( $r['conteudo'] )
 					$menu->addConteudo( $idPagina, $r['conteudo'] );
 				return $app->redirect('/admin/site/menu');
 			}
 			elseif( $operacao == 'edit') {
-				parse_str($request->getContent(), $r);
 				$idPagina = $menu->edit( $r );
 				if( $r['conteudo'] && $r['id'] && empty( $r['idConteudo'] ))
 					$menu->addConteudo( $r['id'], $r['conteudo'] );
@@ -157,7 +155,6 @@
 				return $app->redirect('/admin/site/menu');
 			}
 			elseif($operacao == "imagem") {
-				parse_str($request->getContent(), $r);
 				if( $r['oper'] == "add"){
 					$img = new Imagem($app['db']);
 					$idImagem = $img->add($r['imagem'], $r['dir']);
@@ -168,6 +165,21 @@
 
 					return $app->json( $menu->listaImagensMenu( $r['idMenu'], $r['local'] ) );
 				}
+			}
+			elseif($operacao == "bloquear") {
+				return $app->json( array("status"=>$menu->despublicar( $r['idMenu'] )));
+			}
+			elseif($operacao == "desbloquear") {
+				return $app->json( array("status"=>$menu->publicar( $r['idMenu'] )));
+			}
+			elseif($operacao == "remover") {
+				return $app->json( array("status"=>$menu->del( $r['idMenu'] )));
+			}
+			elseif($operacao == "subir") {
+				return $app->json( array('status'=> $menu->subir( $r['idMenu']) ));
+			}
+			elseif($operacao == "descer") {
+				return $app->json( array('status'=> $menu->descer( $r['idMenu']) ));
 			}
 		}
 
