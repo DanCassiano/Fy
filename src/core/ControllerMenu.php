@@ -74,7 +74,7 @@
 				$vars['departamentos'] = $app['db']->fetchAll('SELECT * FROM departamentos WHERE bloqueado = ? ',array($status));
 			}
 			elseif( $modulo == "faleconosco") {
-				$vars['faleconosco'] = $app['db']->fetchAll('SELECT * FROM fale_conosco WHERE lido = ?',array($status));				
+				$vars['faleconosco'] = $app['db']->fetchAll('SELECT * FROM fale_conosco WHERE lido = ?',array(!$status));				
 			}
 			elseif( $modulo == "publicidade") {
 				$perfil = new Perfil( $app['db']);

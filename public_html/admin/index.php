@@ -21,7 +21,7 @@
 	require "../../src/schema.php";
 
 	$app['debug'] = true;
-	$app['dir'] = dirname(dirname(__DIR__)) . "/public/admin/";
+	$app['dir'] = dirname(dirname(__DIR__)) . "/public_html/admin/";
 
 	Request::enableHttpMethodParameterOverride();
 	$app->mount('/', new Core\ControllerAdmin());

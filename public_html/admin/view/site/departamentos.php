@@ -13,7 +13,7 @@
 					</form>
 				</div>
 				<div class="pull-right" style="margin-right:5px;">
-					<a href="<?=$baseURL?>site/departamentos/novo" class="btn btn-success">Novo</a>
+					<a href="<?=$baseURL?>site/departamentos/edit" class="btn btn-success">Novo</a>
 				</div>
 			</div>
 			<!-- /.box-header -->
