@@ -313,6 +313,27 @@
 										</ul>
 									</a>
 								</li>
+								<li class="">
+									<a href="#">
+										<i class="fa fa-circle-o"></i>
+										Publicidades
+										<i class="fa fa-angle-left pull-right"></i>
+										<ul class="treeview-menu">
+											<li class="">
+												<a href="site/publicidade/perfil">
+													<i class="fa fa-circle-o"></i>
+													Perfil
+												</a>
+											</li>
+											<li class="">
+												<a href="site/publicidade">
+													<i class="fa fa-circle-o"></i>
+													publicidade
+												</a>
+											</li>
+										</ul>
+									</a>
+								</li>
 							</ul>
 						</li>
 						<li class="treeview">
