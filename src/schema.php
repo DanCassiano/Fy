@@ -163,8 +163,10 @@ if (!$schema->tablesExist('fale_conosco')) {
 	$fale_conosco->addColumn('email', 'string',array("length"=>100));
 	$fale_conosco->addColumn('asunto', 'string',array("length"=>200));
 	$fale_conosco->addColumn('msg', 'text');
-	$fale_conosco->addColumn('data_cadastro', 'datetime');
+	$fale_conosco->addColumn('data_criacao', 'datetime');
+	$fale_conosco->addColumn('data_leitura', 'datetime');
 	$fale_conosco->addColumn('lido', 'integer',array('length'=>1, "default"=> 0));
+	$fale_conosco->addColumn('id_departamento', 'integer');
 	$schema->createTable($fale_conosco);
 
 }

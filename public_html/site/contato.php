@@ -29,7 +29,7 @@
 			<div class="row control-group">
 				<div class="form-group col-xs-12 floating-label-form-group controls">
 					<label>Mensagem</label>
-					<textarea rows="5" class="form-control" placeholder="Mensagem" id="message" required data-validation-required-message="Entre com sua mensagem"></textarea>
+					<textarea rows="5" class="form-control" placeholder="Mensagem" id="message" name="msg" required data-validation-required-message="Entre com sua mensagem"></textarea>
 					<p class="help-block text-danger"></p>
 				</div>
 			</div>

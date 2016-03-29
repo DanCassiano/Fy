@@ -32,7 +32,6 @@
 													f.`asunto`,
 	 												f.`id`, 
 	 												DATE_FORMAT( f.`data_criacao`, "%h:%m:%s %d-%m-%Y ") AS data_criacao ,
-	 												f.`data_leitura`,
 	 												f.`email`, 
 	 												f.`msg`, 
 	 												f.`id_departamento`
