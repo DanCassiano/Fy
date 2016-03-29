@@ -20,7 +20,7 @@
 	$schema = $app['db']->getSchemaManager();
 	require "../src/schema.php";
 
-	$app['debug'] = true;
+	// $app['debug'] = true;
 	$app['dir'] = dirname(__DIR__) . "/public_html/site/";
 
 	Request::enableHttpMethodParameterOverride();

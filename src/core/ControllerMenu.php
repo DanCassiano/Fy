@@ -28,38 +28,29 @@
 			$status = $app['request']->get('status');
 			if( $status == "")
 				$status = 1;
-
-
 			$baseURL = $app['request']->getSchemeAndHttpHost() . "/admin/";
-			$temp = new Temp();
-			$vars = array(	"baseURL"=> $baseURL,
-							"titulo"=> "Fy",
+			$temp = new Temp( $app );
+			$vars = array(	"titulo"=> "Fy - " .$modulo,
 							"action"=> "site",
 							"modulo"=> $modulo,
 							"operacao"=>"",
-							"dir"=> $app['dir'],
 							"status"=>$status,
-							"pg"=> $pag,
-							"userImagem"=> $user['imagem'],
-							"userNome"=> $user['nome'] );
+							"pg"=> $pag);
 
 			if( $modulo == "menu") {
 				$temp->js("<script src='{$baseURL}/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js'></script>");
 				$temp->js("<script src='{$baseURL}/js/menu/menu.js'></script>");
-				
-				$vars['paginas'] = $menu->listaMenus( $status );
+				$vars['paginas'] = $menu;
 			}
 			elseif( $modulo == "galeria") {
 
 				$temp->css("<link rel=\"stylesheet\" href=\"{$baseURL}/plugins/jquery-upload/uploadfile.css\">");
 				$temp->css("<link rel=\"stylesheet\" href=\"{$baseURL}/plugins/select2/select2.min.css\">");
-				
 				$temp->js("<script src='{$baseURL}/plugins/jquery-upload/jquery.uploadfile.min.js'></script>");
 				$temp->js("<script src='{$baseURL}/plugins/select2/select2.full.min.js'></script>");
 				$temp->js("<script src='{$baseURL}/plugins/jQueryUI/jquery-ui.min.js'></script>");
 				$temp->js("<script src='{$baseURL}/js/menu/galeria.js'></script>");
-
-				$vars['paginas'] = $app['db']->fetchAll('SELECT * FROM paginas WHERE publicado = ?',array($status));
+				$vars['paginas'] = $menu->listaMenus( $status );
 			}
 			elseif( $modulo == "departamentos") {
 				
@@ -68,13 +59,13 @@
 				}
 				$temp->css("<link rel=\"stylesheet\" href=\"{$baseURL}plugins/datatables/dataTables.bootstrap.css\">");
 				$temp->js("<script src='{$baseURL}plugins/datatables/dataTables.bootstrap.min.js'></script>");
-				// $temp->js("<script src='{$baseURL}plugins/datatables/jquery.dataTables.min.js'></script>");
 				$temp->js("<script src='{$baseURL}/js/menu/departamentos.js'></script>");
-
 				$vars['departamentos'] = $app['db']->fetchAll('SELECT * FROM departamentos WHERE bloqueado = ? ',array($status));
 			}
 			elseif( $modulo == "faleconosco") {
-				$vars['faleconosco'] = $app['db']->fetchAll('SELECT * FROM fale_conosco WHERE lido = ?',array(!$status));				
+				$fale = new FaleConosco( $app['db']);
+				$vars['faleconosco'] = $fale->getMensagens(!$status );
+				$temp->js("<script src='{$baseURL}/js/site/faleconosco.js'></script>");
 			}
 			elseif( $modulo == "publicidade") {
 				$perfil = new Perfil( $app['db']);
@@ -85,7 +76,7 @@
 			
 			$temp->vars( $vars);
 			$temp->setDirTemp( $app['dir'] . "/view/index.php" );
-			return $temp->init();
+			return $temp->init( );
 		}
 
 		public function operacao( Application $app, $modulo, $operacao ){
@@ -93,12 +84,12 @@
 			$user = $app['session']->get('user');
 			if( empty($user))
 				return $app->redirect('/login');
-
-			$baseURL = $app['request']->getSchemeAndHttpHost() . "/admin/";
+			
 			$id = $app['request']->get('id');
-			$temp = new Temp();
+			$temp = new Temp( $app );
+			$baseURL = $app['request']->getSchemeAndHttpHost() . "/admin/";
 			$vars = array(
-							"baseURL"=> $baseURL,
+							
 							"titulo"=> "Fy",
 							"action"=> "site",
 							"modulo"=> $modulo,
@@ -107,8 +98,8 @@
 							"db"=>$app['db'],
 							"id"=> $app['request']->get("id"),
 							"userImagem"=>$user['imagem'],
-							"userNome"=> $user['nome']
-							);
+							"userNome"=> $user['nome'],
+							"db"=> $app['db']);
 			
 			if( $modulo == "departamentos") {
 
@@ -131,13 +122,22 @@
 					$temp->js("<script src='{$baseURL}/js/menu/contatos.js'></script>");
 				}
 			}
+			elseif( $modulo == "faleconosco") {
+
+
+				if( $operacao == "view" ){
+					$fale = new FaleConosco( $app['db']);
+					$vars['contato'] = $fale->getMensagem( $id );
+				}
+			}
+
 
 			$temp->js("<script src='{$baseURL}/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js'></script>");
 			$temp->js("<script src='{$baseURL}/js/menu/menu.js'></script>");
 			$temp->css("<link rel='stylesheet' href='{$baseURL}/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css'>");
 			$temp->vars( $vars);
 			$temp->setDirTemp( $app['dir'] . "/view/index.php" );
-			return $temp->init();
+			return $temp->init( $app );
 		}
 
 		public function postMenu( Application $app, Request $request, $operacao ){
@@ -231,4 +231,17 @@
 
 			return "" ;
 		}
+
+		public function postFaleConosco( Application $app, Request $request, $operacao  ){
+			parse_str($request->getContent(), $r);
+			$fale = new FaleConosco( $app['db']);
+			if( $operacao == "lida"){
+				return $app->json( array("status" => $fale->marcar( $r['id'], 1 )));
+			}
+			elseif( $operacao == "naolida" ){
+				return $app->json( array("status" => $fale->marcar( $r['id'], 0 )));
+			}
+
+		}
+
 	}
