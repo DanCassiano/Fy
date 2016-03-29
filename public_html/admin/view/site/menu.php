@@ -1,3 +1,6 @@
+<?php 
+	
+ ?>
 <div class="row">
 	<div class="col-xs-12">
 		<div class="box box-solid">
@@ -25,15 +28,21 @@
 				<table class="table table-hover table-bordered">
 					<tbody>
 						<tr>
-							<th><input type="checkbox" class="toggle-check" ></th>
+							<th style="width:20px; "><input type="checkbox" class="toggle-check" ></th>
+							<th style="width:20px;">#</th>
 							<th>Menu</th>
-							<th>Data</th>
-							<th>Status</th>
-							<th style="width:220px; "></th>
+							<th style="width:150px;">Data</th>
+							<th style="width:80px; ">Status</th>
+							<th style="width:200px; "></th>
 						</tr>
-						<?php foreach ($paginas as $i => $pagina ): ?>
+						<?php foreach ($paginas->listaMenus( $status, 0 ) as $i => $pagina ): ?>
 							<tr>
 								<td><input type="checkbox" class='check-menu' data-ordem="<?=$pagina['ordem']?>" data-id="<?=$pagina['id']?>"></td>
+								<td>
+									<?php if( $pagina['qtd_filho'] > 0 ){ ?>
+										<span class="glyphicon glyphicon-option-vertical"></span>
+									<?php } ?>
+								</td>
 								<td><?=$pagina['pagina']?></td>
 								<td><?=$pagina['data_criacao']?></td>
 								<td>
@@ -53,7 +62,36 @@
 									<?php } ?>
 								</td>
 							</tr>
-						<?php endforeach ?>
+								
+							<?php if( $pagina['qtd_filho'] > 0){ 
+
+									foreach( $paginas->listaMenus( $status, $pagina['id'] ) as $pgFilho ){ ?>
+										<tr>
+											<td><input type="checkbox" class='check-menu' data-ordem="<?=$pgFilho['ordem']?>" data-id="<?=$pgFilho['id']?>"></td>
+											<td colspan="2">
+												<span class="glyphicon glyphicon-option-vertical"></span><span class="glyphicon glyphicon-option-horizontal"></span>&nbsp;&nbsp;<?=$pgFilho['pagina']?>
+											</td>
+											<td><?=$pgFilho['data_criacao']?></td>
+											<td>
+												<?php if( $pgFilho['publicado'] == 0 ){ ?>
+													<span class="label label-warning">Não publicado</span>
+												<?php }elseif ( $pgFilho['publicado'] == 1 ) {?>
+													<span class="label label-success">publicado</span>
+												<?php } ?>
+											</td>
+											<td>
+												<a href="<?=$baseURL?>site/menu/edit?id=<?=$pgFilho['id']?>" class="btn btn-link btn-xs">Editar</a>
+												<a href="#remover" id='<?=$pgFilho['id']?>' data-menu="<?=$pgFilho['pagina']?>" data-toggle="modal" data-target="#modalMenu" data-whatever="Remover menu " class="btn btn-link btn-xs"  >Remover</a>
+												<?php if( $status == 1){ ?>
+													<a href="#despublicar" id='<?=$pgFilho['id']?>' data-menu="<?=$pgFilho['pagina']?>" data-toggle="modal" data-target="#modalMenu" data-whatever="Despublicar menu " class="btn btn-danger btn-xs"  >Despublicar</a>
+												<?php }else{ ?>
+													<a href="#publicar" id='<?=$pgFilho['id']?>' data-menu="<?=$pgFilho['pagina']?>" data-toggle="modal" data-target="#modalMenu" data-whatever="Publicar menu " class="btn btn-success btn-xs"  >Publicar</a>									
+												<?php } ?>
+											</td>
+										</tr>
+									<?php } 
+								}
+							endforeach ?>
 					</tbody>
 				</table>
 			</div>

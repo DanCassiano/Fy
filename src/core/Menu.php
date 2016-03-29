@@ -36,16 +36,23 @@
 			return $this->_registraImagem($idImagem, $idMenu, $local);
 		}
 
-		public function listaMenus( $status = 1, $ordem = " ASC " ){
+		public function listaMenus( $status = 1, $id_pai = 0, $ordem = " ASC " ){
 			return $this->db->fetchAll('SELECT 
-											id, 
-											pagina, 
-											publicado, 
-											date_format( data_criacao, "%d-%m-%Y %H:%m:%s")as data_criacao,
-											ordem
-										FROM paginas 
-										WHERE publicado = ?  
-										ORDER BY ordem ' .$ordem ,array($status));
+											pag.id, 
+											pag.pagina, 
+											pag.publicado, 
+											DATE_FORMAT( pag.data_criacao, "%d-%m-%Y %H:%m:%s")AS data_criacao,
+											pag.ordem,
+											pag.id_pai,
+											link,
+											( SELECT COUNT(  p.id ) FROM paginas p WHERE p.id_pai = pag.`id`  )AS qtd_filho
+										FROM paginas pag
+										WHERE publicado = ?  AND id_pai = ?
+										ORDER BY ordem ' .$ordem ,array($status, $id_pai));
+		}
+
+		public function listaTiposPagina(){
+			return $this->db->fetchAll('SELECT * FROM tipo_paginas ');
 		}
 
 		public function listaImagensMenu( $idMenu, $local){
@@ -116,7 +123,8 @@
 				"link"=>$dados['link'],
 				"publicado"=>$dados['status'],
 				"data_criacao"=> date("Y-m-d H:m:s"),
-				"ordem"=> $ordemMenu ));
+				"ordem"=> $ordemMenu,
+				"id_pai"=> $dados['id_pai'] ));
 		}
 
 		private function update( $dados ){

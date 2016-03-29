@@ -30,19 +30,16 @@
 			$usuarios = $app['db']->fetchAll('SELECT id, nome, email, imagem FROM usuario WHERE ativo = ?',array($status));
 
 			$baseURL = $app['request']->getSchemeAndHttpHost()  . "/admin/"; 
-			$temp = new Temp();
+			$temp = new Temp( $app );
 			$temp->vars(array(
 							"baseURL"=> $baseURL,
-							"titulo"=> "Fy",
+							"titulo"=> "Fy - " .$modulo,
 							"action"=> "usuario",
 							"modulo"=> $modulo,
 							"operacao"=>"",
-							"dir"=> $app['dir'],
 							"status"=>$status,
 							"pg"=> $pag,
-							'usuarios'=>$usuarios,
-							"userNome"=> $user['nome'],
-							"userImagem"=>  $user['imagem'] ));
+							'usuarios'=>$usuarios ));
 
 			$temp->js("<script src='{$baseURL}/plugins/iCheck/icheck.min.js'></script>");
 			$temp->css("<link rel=\"stylesheet\" href=\"{$baseURL}/plugins/iCheck/all.css\">");
@@ -59,20 +56,16 @@
 			if( empty($user))
 				return $app->redirect('/admin/login');
 			$baseURL = $app['request']->getSchemeAndHttpHost()  . "/admin/" ;
-			$temp = new Temp();
+			$temp = new Temp( $app );
 			$temp->vars(array(
 							"baseURL"=> $baseURL,
-							"titulo"=> "Fy",
+							"titulo"=> "Fy - " .$modulo,
 							"action"=> "usuario",
 							"modulo"=> $modulo,
 							"operacao"=> $operacao,
-							"dir"=> $app['dir'],
 							"db"=>$app['db'],
 							"id"=> $app['request']->get("id"),
-							"usuario"=> $app['db']->fetchAll('SELECT id, nome, email, imagem FROM usuario WHERE id = ?',array($app['request']->get("id"))),
-							"userNome"=> $user['nome'],
-							"userImagem"=> $user['imagem'] 
-							));
+							"usuario"=> $app['db']->fetchAll('SELECT id, nome, email, imagem FROM usuario WHERE id = ?',array($app['request']->get("id")))));
 			
 			$temp->css("<link rel=\"stylesheet\" href=\"{$baseURL}/plugins/iCheck/all.css\">");
 			$temp->css("<link rel=\"stylesheet\" href=\"{$baseURL}/plugins/jquery-upload/uploadfile.css\">");

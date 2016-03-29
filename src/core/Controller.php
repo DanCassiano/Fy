@@ -16,10 +16,10 @@ class Controller implements ControllerProviderInterface {
 	private $dir;
 	
 	private $vars;
-	
-	private $action;
 
-	private $rotas;
+	private $js;
+
+	private $css;
 		
 	public function connect(Application $app) {
 
@@ -27,79 +27,73 @@ class Controller implements ControllerProviderInterface {
 		$this->dir = $app['dir'];
 
 		//Home
-			$factory->get('/','Core\Controller::pagina');
-			$factory->get('/{action}','Core\Controller::pagina');
+			$factory
+				->get('/{action}','Core\Controller::pagina')
+				->value('action', 'home');
 
 		// upload
 			$factory->post('uploads/{destino}','Core\ControllerUpload::upload');
+		// fale consco
+			$factory->post('contato/site/faleconosco','Core\Controller::faleConosco');
 
 		return $factory;
 	}
 
-	public function home( Application $app ){
-
+	public function pagina( Application $app, $action ){
 		
-
-		$user = $app['session']->get('user');
-		if( empty($user))
-			return $app->redirect('login');
-
 		$this->dir = $app['dir'];
-		$this->vars = array("baseURL"=> $app['request']->getSchemeAndHttpHost(),
-							"titulo"=> "Fy - HOME",
-							"userImagem"=>'dist/img/user2-160x160.jpg',
-							"userNome"=>  $user['nome'],
-							"css"=>"",
-							"js"=>"",
-							"action"=>"" );
-		return "";// $this->init();
-	}
+		$baseURL = $app['request']->getSchemeAndHttpHost() . "/site/";
+		$link = ( $action == "home" ? "" : $action  );
+		$pagina = $app['db']->fetchAll('SELECT conteudo, tipo FROM paginas LEFT JOIN conteudo ON conteudo.id_pagina =  paginas.id WHERE link= ?',array( $link ));
+		$menu = new Menu( $app['db']);
 
-	public function action( Application $app, $action, $modulo ){
-		$this->dir = $app['dir'];
+		$var = array("titulo"=> $action, 
+					"baseURL" => $baseURL,
+					'menus'=> $menu->listaMenus(),
+					"action"=>$action, 
+					"conteudo"=> $pagina[0]['conteudo']  );
 
-		$status = $app['request']->get('status');
-
-		if( $status == "")
-			$status = 1;
-
-		$this->vars = array("baseURL"=> $app['request']->getSchemeAndHttpHost(),
-							"titulo"=> "Fy - " . $modulo,
-							"action"=> $action,
-							"modulo"=> $modulo,
-							"operacao"=>"",
-							"dir"=> $this->dir,
-							"db"=>$app['db'],
-							"status"=>$status,
-							"pg"=>$app['request']->get('pg'));
+		if( !file_exists( $app['dir'] . "/" .$pagina[0]['tipo'] . ".php" ))
+			$var['action'] = "404";
+	
+		$this->vars( $var);
+		$this->setDirTemp( $app['dir'] . "index.php" );
 		return $this->init();
 	}
-	
 
-	public function pagina( Application $app, $action = "" ){
-			$temp = new Temp();
-			$var = array("titulo"=> "HOME",
-						"dir"=> $app['dir'], 
-						'baseURL' => $app['request']->getSchemeAndHttpHost() );
+	public function faleConosco(Application $app, Request $request  ){
 
-		$menu = $app['db']->fetchAll('SELECT conteudo, tipo FROM paginas LEFT JOIN conteudo ON conteudo.id_pagina =  paginas.id WHERE link= ?',array($action));
-		
-		if( $action == "" || file_exists( $app['dir'] . "/" .$menu[0]['tipo'] . ".php" )) {
-			$paginas = $app['db']->fetchAll('SELECT paginas.id, pagina, link, conteudo, tipo FROM paginas LEFT JOIN conteudo ON conteudo.id_pagina =  paginas.id WHERE publicado =1',array(1));
-			$var["paginas"]=$paginas;
-			$var["pagina"]=$menu[0];
-			$var['action'] = $menu[0]['tipo'];
+			$fale = new FaleConosco( $app['db']);
+			parse_str($request->getContent(), $r);
+			$fale->add(array( "asunto"=> $r['asunto'],
+								'email'=> $r['email'],
+								'msg' => $r['name'] . " <br/>" . $r['msg'],
+								'data_criacao' => date("Y-m-d H:m:s"),
+								'id_departamento' => 1));
+			return 1 ;
 		}
-		else
-			$var['action'] = "404";
-		if( $action == "contato")
-		{
-			$temp->js("<script src='{$baseURL}/assets/js/ap.js'></script>");
-		}
-		$temp->js("<script src='{$baseURL}/assets/js/ap.js'></script>");
 
-		$temp->vars( $var);
-		$temp->setDirTemp( $app['dir'] . "index.php" );
-		return $temp->init();
+	public function js( $asset ){
+		$this->js .= $asset;
+	}
+
+	public function vars( array $vars ){
+		$this->vars = $vars;
+	}
+
+	public function setDirTemp( $dir ){
+		$this->temp = $dir;
+	}
+
+	public function init( ){
+		$this->vars['js'] = $this->js;
+		$this->vars['css'] = $this->css;
+		$this->vars['dir'] = $this->dir;
+			ob_start();
+				extract($this->vars);
+				require $this->temp;
+				$pag = ob_get_contents();
+			ob_end_clean();
+		return str_replace(array("\n","\r","\t"),'',$pag);
 	}
 }

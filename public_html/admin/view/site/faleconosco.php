@@ -4,7 +4,7 @@
 			<div class="box-header">
 				<h3 class="box-title">Fale conosco</h3>
 				<div class="pull-right">
-					<form action="<?=$baseURL?>usuario/users" id="formStatus">
+					<form action="<?=$baseURL?>site/faleconosco/" id="formStatus">
 						<select class="form-control" style="width:200px" name="status" id="selectStatus">
 							<option value="1" <?=$status == 1 ? "selected=selected": "" ?> >Não lidos</option>
 							<option value="0" <?=$status == 0 ? "selected=selected": "" ?>>Lidos</option>
@@ -20,14 +20,21 @@
 						<tr>
 							<th>Remetente</th>
 							<th>Asunto</th>
-							<th>Data</th>
+							<th style="width:180px">Data</th>
+							<th style="width:180px"></th>
 						</tr>
 						<?php foreach ($faleconosco as $i => $fa ): ?>
 							<tr>
 								<td><?=$fa['email']?></td>
+								<td><?=$fa['asunto']?></td>
+								<td><?=$fa['data_criacao']?></td>
 								<td>
-									<a href="<?=$baseURL?>site/departamentos/edit?id=<?=$fa['id']?>" class="btn btn-link btn-xs">View</a>
-									<a href="#edit" id='<?=$fa['id']?>' class="btn btn-link btn-xs"  >Marcar como lida</a>
+									<a href="<?=$baseURL?>site/faleconosco/view?id=<?=$fa['id']?>" class="btn btn-link btn-xs">View</a>
+									<?php if( $status == 1 ) { ?>
+										<a href="#lida" id='<?=$fa['id']?>' class="btn btn-link btn-xs btn-lida"  >Marcar como lida</a>
+									<?php }else { ?>
+										<a href="#naolida" id='<?=$fa['id']?>' class="btn btn-link btn-xs btn-nao-lida"  >Marcar como não lida</a>
+									<?php } ?>
 								</td>
 							</tr>
 						<?php endforeach ?>

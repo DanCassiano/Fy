@@ -30,6 +30,8 @@
 				$factory->post('site/departamentos/{operacao}','Core\ControllerMenu::postDepartamento');
 				$factory->post('site/departamentos/contatos/{operacao}','Core\ControllerMenu::postContato');
 
+				$factory->post('site/faleconosco/{operacao}','Core\ControllerMenu::postFaleConosco');
+
 		
 			// Usuario
 				$factory->get('usuario/{modulo}/','Core\ControllerUsuarios::action');
@@ -59,13 +61,10 @@
 			if( empty($user))
 				return $app->redirect('login');
 
-			$temp = new Temp();
+			$temp = new Temp( $app );
 			$temp->vars( array('titulo'=> "Lite - Dashboard",
-								'baseURL'=> $app['request']->getSchemeAndHttpHost() . "/admin/",
 								"action"=>"",
-								"modulo"=>"",
-								"userImagem"=> $user['imagem'],
-								"userNome"=> $user['nome']));
+								"modulo"=>""));
 			$temp->setDirTemp( $app['dir'] . "view/index.php");
 			return $temp->init();
 		}

@@ -8,10 +8,19 @@
 	$conteudo = "";
 	$idConteudo = "";
 	if( !empty( $id )){
-		$pagina = $db->fetchAll('SELECT paginas.id, pagina, link, publicado, conteudo.conteudo, conteudo.id as id_conteudo
+		$pagina = $db->fetchAll('SELECT 
+									paginas.id, 
+									pagina, 
+									link, 
+									publicado, 
+									conteudo.conteudo, 
+									conteudo.id as id_conteudo,
+									id_pai,
+									tipo
 								FROM paginas 
 								LEFT JOIN conteudo ON conteudo.id_pagina = paginas.id 
 								WHERE paginas.id = '. $id);
+
 		$id = $pagina[0]['id'];
 		$nome = $pagina[0]['pagina'];
 		$link = $pagina[0]['link'];
@@ -20,18 +29,55 @@
 		$idConteudo = $pagina[0]['id_conteudo'];
 		$acao = "edit";
 	}
+
+	$menus = $db->fetchAll('SELECT paginas.id, pagina, id_pai FROM paginas ');
+	$tipos = $db->fetchAll('SELECT * FROM tipo_paginas ');
 ?>
-<div class="box box-primary">
-	<div class="box-header with-border">
-		<?php if( !empty( $id )){ ?>
-			<h3 class="box-title">Editar</h3>
-		<?php }else { ?>
-			<h3 class="box-title">Adicionar</h3>
-		<?php } ?>
-	</div>
-	<!-- /.box-header -->
-	<!-- form start -->
-	<form role="form" action="<?=$baseURL?>site/menu/<?=$acao?>" method="post"> 
+<form role="form" action="<?=$baseURL?>site/menu/<?=$acao?>" method="post"> 
+
+	<div class="box box-primary">
+		<div class="box-header with-border">
+			<?php if( !empty( $id )){ ?>
+				<h3 class="box-title">Editar</h3>
+			<?php }else { ?>
+				<h3 class="box-title">Adicionar</h3>
+			<?php } ?>
+
+			<div class="pull-right" >
+				<select name="id_pai" class="form-control">
+					<option >--</option>
+					<?php foreach( $menus as $m ){ 
+
+						$selected = "";
+						if( $pagina[0]['id'] == $m['id_pai'] )
+							$selected = "selected='selected'";
+					?>
+					<option value="<?=$m['id']?>" <?=$selected?> ><?=$m['pagina']?></option>
+					<?php } ?>
+				</select>
+			</div>
+			<div class="pull-right" style="margin-top:5px; margin-right:5px;">
+				<label for="exampleInputPassword1">Pertence: </label>
+			</div>
+			<div class="pull-right" style="margin-right: 5px;" required>
+				<select name="tipo" class="form-control">
+					<option ></option>
+					<?php foreach( $tipos as $t ){ 
+
+						$selected = "";
+						if( $pagina[0]['tipo'] == $t['tipo'] )
+							$selected = "selected='selected'";
+					?>
+					<option value="<?=$t['id']?>" <?=$selected?> ><?=$t['nome']?></option>
+					<?php } ?>
+				</select>
+			</div>
+			<div class="pull-right" style="margin-top:5px; margin-right:5px;">
+				<label>Tipo de conteudo:</label>
+			</div>
+		</div>
+		<!-- /.box-header -->
+		<!-- form start -->
 		<input type="hidden" name="id" value="<?=$id?>"></input>
 		<input type="hidden" name="idConteudo" value="<?=$idConteudo?>"></input>
 		<div class="box-body">
@@ -60,5 +106,5 @@
 			<button type="submit" class="btn btn-success pull-right">Salvar</button>
 		</div>
 		<!-- /.box-footer -->
-	</form>
-</div>
+	</div>
+</form>

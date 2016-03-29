@@ -8,25 +8,36 @@ if (!$schema->tablesExist('paginas')) {
 	$paginas->setPrimaryKey(array('id'));
 	
 	$paginas->addColumn('pagina', 'string', array('length' => 100));
-	// $paginas->addUniqueIndex(array('username'));
 	$paginas->addColumn('link', 'string', array('length' => 50));
 	$paginas->addColumn('tipo', 'string', array('length' => 100));
 	$paginas->addColumn('publicado', 'integer', array('default' => 1));
 	$paginas->addColumn('data_criacao', 'datetime');
 	$paginas->addColumn('ordem', 'integer');
+	$paginas->addColumn('id_pai', 'integer',array("default"=>0));
 
 	$schema->createTable($paginas);
 
-
-	
-
-
     $app['db']->insert('paginas', array(
       'pagina' => 'Home',
-      'tipo' => '',
+      'tipo' => 'home',
       'data_criacao' => date("Y-m-d H:m:s"),
       'ordem' => 1,
+      "id_pai"=>0
     ));
+}
+
+if (!$schema->tablesExist('tipo_paginas')) {
+		$tipo_paginas = new Table('tipo_paginas');
+	
+	$tipo_paginas->addColumn('id', 'integer', array('unsigned' => true, 'autoincrement' => true));
+	$tipo_paginas->setPrimaryKey(array('id'));
+	
+	$tipo_paginas->addColumn('nome', 'string', array('length' => 100));
+	$tipo_paginas->addColumn('tipo', 'string', array('length' => 100));
+	$schema->createTable($tipo_paginas);
+	$app['db']->insert('tipo_paginas', array("nome"=> "Pagina Inicial", "tipo"=> 'index'));
+	$app['db']->insert('tipo_paginas', array("nome"=> "Pagina de contato", "tipo"=> 'contato'));
+	$app['db']->insert('tipo_paginas', array("nome"=> "Pagina Sobre", "tipo"=> 'sobre'));
 }
 
 if (!$schema->tablesExist('conteudo')) {
