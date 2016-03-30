@@ -2,3 +2,4 @@ vendor
 log
 *.log
 nbproject
+node_modules

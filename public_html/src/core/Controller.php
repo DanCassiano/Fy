@@ -51,7 +51,7 @@ class Controller implements ControllerProviderInterface {
 					"baseURL" => $baseURL,
 					'menus'=> $menu->listaMenus(),
 					"action"=>$action, 
-					"conteudo"=> $pagina[0]['conteudo']  );
+					"conteudo"=> $pagina[0]['conteudo'] );
 
 		if( !file_exists( $app['dir'] . "/" .$pagina[0]['tipo'] . ".php" ))
 			$var['action'] = "404";

@@ -27,10 +27,14 @@
 				$factory->get('site/{modulo}/{operacao}','Core\ControllerMenu::operacao');
 				$factory->post('site/menu/{operacao}','Core\ControllerMenu::postMenu');
 				
-				$factory->post('site/departamentos/{operacao}','Core\ControllerMenu::postDepartamento');
-				$factory->post('site/departamentos/contatos/{operacao}','Core\ControllerMenu::postContato');
-
-				$factory->post('site/faleconosco/{operacao}','Core\ControllerMenu::postFaleConosco');
+				// departamentos
+					$factory->post('site/departamentos/{operacao}','Core\ControllerMenu::postDepartamento');
+					$factory->post('site/departamentos/contatos/{operacao}','Core\ControllerMenu::postContato');
+				// faleconosco
+					$factory->post('site/faleconosco/{operacao}','Core\ControllerMenu::postFaleConosco');
+				// perfil
+					$factory->post('site/perfil/{operacao}','Core\ControllerMenu::postPerfil');
+					
 
 		
 			// Usuario

@@ -16,7 +16,6 @@
 		function action( Application $app, $modulo ){
 
 			$menu = new Menu( $app['db']);
-
 			$user = $app['session']->get('user');
 			if( empty($user))
 				return $app->redirect('/admin/login');
@@ -30,7 +29,7 @@
 				$status = 1;
 			$baseURL = $app['request']->getSchemeAndHttpHost() . "/admin/";
 			$temp = new Temp( $app );
-			$vars = array(	"titulo"=> "Fy - " .$modulo,
+			$vars = array(	"titulo"=> "Administrator - " .$modulo,
 							"action"=> "site",
 							"modulo"=> $modulo,
 							"operacao"=>"",
@@ -73,6 +72,16 @@
 				$vars['perfis'] = $perfil->listPerfilt();
 				$vars['publicidades'] = $publ->listPublicidades();
 			}
+			elseif( $modulo == "perfil"){
+				$perfil = new Perfil( $app['db'] );
+				if( $status == 1 )
+					$status = 'N';
+				else
+					$status = 'S';
+
+				$vars['perfis'] = $perfil->listPerfilt( $status );
+				$temp->js("<script src='{$baseURL}/js/site/perfil.js'></script>");
+			}
 			
 			$temp->vars( $vars);
 			$temp->setDirTemp( $app['dir'] . "/view/index.php" );
@@ -90,15 +99,13 @@
 			$baseURL = $app['request']->getSchemeAndHttpHost() . "/admin/";
 			$vars = array(
 							
-							"titulo"=> "Fy",
+							"titulo"=> " Administrator " .$modulo,
 							"action"=> "site",
 							"modulo"=> $modulo,
 							"operacao"=> $operacao,
 							"dir"=> $app['dir'],
 							"db"=>$app['db'],
 							"id"=> $app['request']->get("id"),
-							"userImagem"=>$user['imagem'],
-							"userNome"=> $user['nome'],
 							"db"=> $app['db']);
 			
 			if( $modulo == "departamentos") {
@@ -123,12 +130,15 @@
 				}
 			}
 			elseif( $modulo == "faleconosco") {
-
-
 				if( $operacao == "view" ){
 					$fale = new FaleConosco( $app['db']);
 					$vars['contato'] = $fale->getMensagem( $id );
 				}
+			}
+			elseif( $modulo == "perfil"){
+				$perfil = new Perfil( $app['db']);
+				$vars['perfil'] = $perfil->getPerfil( $id );
+				$temp->js("<script src='{$baseURL}/js/site/perfil.js'></script>");
 			}
 
 
@@ -137,7 +147,7 @@
 			$temp->css("<link rel='stylesheet' href='{$baseURL}/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css'>");
 			$temp->vars( $vars);
 			$temp->setDirTemp( $app['dir'] . "/view/index.php" );
-			return $temp->init( $app );
+			return $temp->init( );
 		}
 
 		public function postMenu( Application $app, Request $request, $operacao ){
@@ -241,7 +251,21 @@
 			elseif( $operacao == "naolida" ){
 				return $app->json( array("status" => $fale->marcar( $r['id'], 0 )));
 			}
-
 		}
 
+		public function postPerfil( Application $app, Request $request, $operacao  ){
+			parse_str($request->getContent(), $r);
+			$perfil = new Perfil( $app['db']);
+			var_dump( $r );
+			if( $operacao == "salvar"){
+
+				if( empty($r['id'])) {
+					echo $perfil->add( array( "perfil"=> $r['perfil'], "bloqueado"=> trim($r['bloqueado']) ) );
+				}
+				else{
+					$perfil->edit( array("id"=> $r['id'], "perfil"=> $r['perfil'], "bloqueado"=> trim($r['bloqueado']) == "" ? "S" : trim($r['bloqueado']) ) );
+				}
+				return $app->redirect('/admin/site/perfil');
+			}
+		}
 	}

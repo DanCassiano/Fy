@@ -1,0 +1,22 @@
+{
+  "name": "Fy",
+  "version": "0.0.1",
+  "description": "CMS",
+  "main": "index.php",
+  "dependencies": {
+    "grunt": "^0.4.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/DanCassiano/Fy"
+  },
+  "author": "DanCassiano",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DanCassiano/Fy/issues"
+  }
+}

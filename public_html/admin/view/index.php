@@ -124,14 +124,6 @@
 					<!-- /.search form -->
 					<!-- sidebar menu: : style can be found in sidebar.less -->
 					<ul class="sidebar-menu">
-						<!-- <li class="header">MAIN NAVIGATION</li> -->
-						<li class="treeview">
-							<a href="index.php">
-								<i class="fa fa-dashboard"></i>
-								<span>Dashboard</span>
-								<i class="fa fa-angle-left pull-right"></i>
-							</a>
-						</li>
 						<li class="treeview">
 							<a href="#">
 								<i class="fa fa-laptop"></i>
@@ -141,19 +133,19 @@
 							<ul class="treeview-menu">
 								<li class="">
 									<a href="site/menu">
-										<i class="fa fa-circle-o"></i>
+										<i class="fa fa-clone"></i>
 										Menu
 									</a>
 								</li>
 								<li class="">
 									<a href="site/galeria">
-										<i class="fa fa-circle-o"></i>
+										<i class="fa fa-image"></i>
 										Imagens
 									</a>
 								</li>
 								<li class="">
 									<a href="#">
-										<i class="fa fa-circle-o"></i>
+										<i class="fa  fa-bullhorn"></i>
 										Fale conosco
 										<i class="fa fa-angle-left pull-right"></i>
 										<ul class="treeview-menu">
@@ -174,16 +166,10 @@
 								</li>
 								<li class="">
 									<a href="#">
-										<i class="fa fa-circle-o"></i>
+										<i class="fa fa-diamond"></i>
 										Publicidades
 										<i class="fa fa-angle-left pull-right"></i>
 										<ul class="treeview-menu">
-											<li class="">
-												<a href="site/publicidade/perfil">
-													<i class="fa fa-circle-o"></i>
-													Perfil
-												</a>
-											</li>
 											<li class="">
 												<a href="site/publicidade">
 													<i class="fa fa-circle-o"></i>
@@ -191,6 +177,12 @@
 												</a>
 											</li>
 										</ul>
+									</a>
+								</li>
+								<li class="">
+									<a href="site/perfil">
+										<i class="fa fa-object-group"></i>
+										Perfil
 									</a>
 								</li>
 							</ul>
