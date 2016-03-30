@@ -90,6 +90,6 @@
 			elseif( $operacao == 'imagem'){
 				$usuario->setImagem($r['id'],$r['imagem']);
 			}
-			return $app->redirect('/usuario/users');
+			return $app->redirect('/admin/usuario/users');
 		}
 	}

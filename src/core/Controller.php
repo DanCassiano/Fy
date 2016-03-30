@@ -42,19 +42,21 @@ class Controller implements ControllerProviderInterface {
 	public function pagina( Application $app, $action ){
 		
 		$this->dir = $app['dir'];
-		$baseURL = $app['request']->getSchemeAndHttpHost() . "/site/";
-		$link = ( $action == "home" ? "" : $action  );
-		$pagina = $app['db']->fetchAll('SELECT conteudo, tipo FROM paginas LEFT JOIN conteudo ON conteudo.id_pagina =  paginas.id WHERE link= ?',array( $link ));
+		$baseURL = $app['request']->getSchemeAndHttpHost() . "/site/";		
+		$pagina = $app['db']->fetchAll('SELECT conteudo, tipo FROM paginas LEFT JOIN conteudo ON conteudo.id_pagina =  paginas.id WHERE link= ?',array( $action ));
 		$menu = new Menu( $app['db']);
+
+		$include = $app['dir'] .$pagina[0]['tipo'] . ".php";
+
+		if( !file_exists( $include ))
+			$include  =  $app['dir'] . "404.php";
+		
 
 		$var = array("titulo"=> $action, 
 					"baseURL" => $baseURL,
 					'menus'=> $menu->listaMenus(),
-					"action"=>$action, 
-					"conteudo"=> $pagina[0]['conteudo'] );
-
-		if( !file_exists( $app['dir'] . "/" .$pagina[0]['tipo'] . ".php" ))
-			$var['action'] = "404";
+					"conteudo"=> $pagina[0]['conteudo'],
+					"include" => $include );
 	
 		$this->vars( $var);
 		$this->setDirTemp( $app['dir'] . "index.php" );

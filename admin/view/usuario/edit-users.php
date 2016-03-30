@@ -23,7 +23,7 @@
 	</div>
 	<!-- /.box-header -->
 	<!-- form start -->
-	<form role="form" action="<?=$baseURL?>/usuario/users/<?=$acao?>" method="post"> 
+	<form role="form" action="<?=$baseURL?>usuario/users/<?=$acao?>" method="post"> 
 		<input type="hidden" name="id" value="<?=$id?>"></input>
 		<div class="box-body">
 			<div class="form-group ">

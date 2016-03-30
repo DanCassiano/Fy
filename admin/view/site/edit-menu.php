@@ -52,7 +52,7 @@
 						if( $pagina[0]['id'] == $m['id_pai'] )
 							$selected = "selected='selected'";
 					?>
-					<option value="<?=$m['id']?>" <?=$selected?> ><?=$m['pagina']?></option>
+					<option value="<?=$m['tipo']?>" <?=$selected?> ><?=$m['pagina']?></option>
 					<?php } ?>
 				</select>
 			</div>

@@ -124,7 +124,8 @@
 				"publicado"=>$dados['status'],
 				"data_criacao"=> date("Y-m-d H:m:s"),
 				"ordem"=> $ordemMenu,
-				"id_pai"=> $dados['id_pai'] ));
+				"id_pai"=> $dados['id_pai'],
+				"tipo"=> $dados['tipo'] ));
 		}
 
 		private function update( $dados ){
@@ -134,8 +135,9 @@
 							`pagina` = ?,
 							`link` = ?,
 							`publicado` = ?
+							'tipo' = ?
 							WHERE `id` = ".$dados['id'];
-			return $this->db->executeUpdate($sql, array( (int)$dados['id'],$dados['nome'], $dados['link'], $dados['status'] ));
+			return $this->db->executeUpdate($sql, array( (int)$dados['id'],$dados['nome'], $dados['link'], $dados['status'], $dados['tipo'] ));
 		}
 
 		private function _del( $idMenu){
