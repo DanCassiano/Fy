@@ -2,7 +2,7 @@
 	use Symfony\Component\HttpFoundation\Response;
 	use Symfony\Component\HttpFoundation\Request;
 
-	require_once '../vendor/autoload.php';
+	require_once 'vendor/autoload.php';
 	
 	$app = new Silex\Application();
 	$app->register(new Silex\Provider\SessionServiceProvider());
@@ -18,7 +18,7 @@
 		));
 
 	$schema = $app['db']->getSchemaManager();
-	require "../src/schema.php";
+	require "src/schema.php";
 
 	$app['debug'] = true;
 	$app['dir'] = dirname(dirname(__DIR__)) . "/public_html/admin/";
