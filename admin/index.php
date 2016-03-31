@@ -1,6 +1,7 @@
 <?php
 	use Symfony\Component\HttpFoundation\Response;
 	use Symfony\Component\HttpFoundation\Request;
+	use Symfony\Component\HttpFoundation\RedirectResponse;
 
 	require_once '../vendor/autoload.php';
 	
@@ -25,7 +26,17 @@
 	
 
 	Request::enableHttpMethodParameterOverride();
+
+	
 	$app->mount('/', new Core\ControllerAdmin());
+
+	$app->before(function (Request $request) use ( $app ) {
+			$user = $app['session']->get('user');
+			$pagina = $request->getRequestUri();
+			if( empty($user) && end(explode("/", $pagina)) !=  "login" )
+        	return new RedirectResponse('/admin/login');
+		
+	});
 
 	$app->error(function (\Exception $e, $code) {
 		switch ($code) {

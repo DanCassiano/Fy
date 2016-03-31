@@ -33,8 +33,11 @@ class Controller implements ControllerProviderInterface {
 
 		// upload
 			$factory->post('uploads/{destino}','Core\ControllerUpload::upload');
+
 		// fale consco
 			$factory->post('contato/site/faleconosco','Core\Controller::faleConosco');
+
+		
 
 		return $factory;
 	}

@@ -336,3 +336,60 @@
 
   }
 })(jQuery, $.AdminLTE);
+
+(function($){
+
+	var Dialogo = function(){
+		$(function(){
+			$("#files").height( $(".mascara .box-body").height() )
+		})
+	}
+	var dialogo = Dialogo.prototype;
+		dialogo.m = $(".mascara");
+		dialogo.files =[];
+		dialogo.html;
+		dialogo.show = function(){
+			var d = this;
+			$.get(this.options.url,function(dados){
+				d.load(dados);
+			},'json');
+			this.m.show()
+		}
+
+		dialogo.load = function(files){
+			this.html = "";
+			var d = this;
+			$("#files").html('');
+			$.each( files, function(i,v){
+				d.html += '<li>'+
+							'<img src="../upload/'+v+'" alt="" style="width:200px; height:150px;" />'+
+							'<div class="mailbox-attachment-info">'+
+								'<a href="#" class="mailbox-attachment-name"><i class="fa fa-camera"></i> photo1.png</a>'+
+								'<span class="mailbox-attachment-size">2.67 MB'+
+									'<a href="#" class="btn btn-default btn-xs pull-right">'+
+										'<i class="fa fa-cloud-download"></i>'+
+									'</a>'+
+								'</span>'+
+							'</div>'+
+						'</li>';
+			});
+			$("#files").html( d.html );
+		}
+
+		dialogo.hide = function(){
+			this.m.hide();
+		}
+
+		dialogo.options = {
+			url:"",
+			beforeShow: function(){}
+		}
+
+		$('.mascara').on('click', "a[href='#fechar']",function(e){
+			e.preventDefault();
+			dialogo.hide();
+		});
+
+		
+	$.dialogo = new Dialogo();
+})(jQuery);

@@ -1,20 +1,20 @@
 
 ;(function(window,$){
 
+
+
 	$("#selectStatus").change(function(){
 		console.log(this)
 		$("#formStatus").submit();
-	});	
+	});
 
 	$("body").on("click","a[href='#edit']",function(e){
 		e.preventDefault();
 		var f = confirm("Excluir menu");
 		alert(f)
-	})
-
+	});
 	
 	$('#txtConteudo').wysihtml5();
-
 
 	$('#modalMenu').on('show.bs.modal', function (event) {
 		var button = $(event.relatedTarget) // Button that triggered the modal
@@ -45,7 +45,6 @@
 			}
 			
 	});
-
 
 	$(".btn-desbloquear-menu").click(function(){
 		$.post("site/menu/desbloquear", { idMenu: $('#idMenuRemover').val() },function(dados){
@@ -104,7 +103,6 @@
 			}
 	});
 
-
 	$(".toggle-check").click(function(){
 		$(".check-menu").prop("checked",  $(this).prop("checked") );
 	});
@@ -122,5 +120,18 @@
 				location.reload();
 		})
 	});
+
+	if( location.hash )
+		$('.nav-tabs-custom a[href="'+location.hash+'"]').tab('show');
+
+	$('.nav-tabs-custom a').click(function (e) {
+		location.hash = $(this).attr("href");
+	});
+
+	$.dialogo.options.url = "uploads/files/galeria";
+	$("body").on('click',".btn-upload",function(e){
+		e.preventDefault();
+		$.dialogo.show();
+	})
 
 })(window,jQuery);
