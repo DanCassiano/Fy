@@ -6,6 +6,7 @@
 	use Symfony\Component\HttpFoundation\Request;
 	use Symfony\Component\HttpFoundation\Response;
 	use Symfony\Component\HttpKernel\Exception\HttpException;
+	use Symfony\Component\Finder\Finder;
 	use Core\Usuarios;
 	use Core\Temp;
 
@@ -55,15 +56,27 @@
 
 			// upload
 				$factory->post('uploads/{destino}','Core\ControllerUpload::upload');
+				$factory->get('uploads/files/{local}','Core\ControllerAdmin::files');
 
 			return $factory;
+		}
+
+		public function files( Application $app, $local ){
+
+			$finder = new Finder();
+			$finder->files()->in( $app['dir']  . "../upload/" );
+			$r = array();
+			foreach ($finder as $file) {
+				$r[] = $file->getRelativePathname();
+			}
+			return $app->json($r);
 		}
 
 		public function home( Application $app ){
 			
 			$user = $app['session']->get('user');
-			if( empty($user))
-				return $app->redirect('login');
+			// if( empty($user))
+			// 	return $app->redirect('login');
 
 			$temp = new Temp( $app );
 			$temp->vars( array('titulo'=> "Lite - Dashboard",
@@ -77,8 +90,6 @@
 		
 			$user = $app['session']->get('user');
 		
-			if( !empty($user))
-				return $app->redirect('/admin');
 
 			$this->dir = $app['dir'];
 			$this->vars = array("baseURL"=> $app['request']->getSchemeAndHttpHost() . "/admin/",
